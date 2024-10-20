@@ -1,5 +1,5 @@
 import { AdminActions, Coupon, Product } from '../../types.ts';
-import { useAdmin } from '../hooks/useAdmin.ts';
+import { useAdmin } from '../hooks';
 
 interface Props {
   products: Product[];
