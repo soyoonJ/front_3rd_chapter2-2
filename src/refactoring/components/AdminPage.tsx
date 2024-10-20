@@ -17,26 +17,28 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
   };
 
   const {
-    openProductIds,
-    editingProduct,
-    newDiscount,
-    setNewDiscount,
-    newCoupon,
-    setNewCoupon,
     showNewProductForm,
     setShowNewProductForm,
     newProduct,
-    setNewProduct,
+    updateNewProduct,
+    handleAddNewProduct,
+
+    openProductIds,
     toggleProductAccordion,
+
+    editingProduct,
     handleEditProduct,
-    handleProductNameUpdate,
-    handlePriceUpdate,
+    handleEditingProductUpdate,
     handleEditComplete,
-    handleStockUpdate,
+
+    newDiscount,
+    setNewDiscount,
     handleAddDiscount,
     handleRemoveDiscount,
+
+    newCoupon,
+    setNewCoupon,
     handleAddCoupon,
-    handleAddNewProduct,
   } = useAdmin(products, adminActions);
 
   return (
@@ -62,7 +64,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                   id="productName"
                   type="text"
                   value={newProduct.name}
-                  onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                  onChange={(e) => updateNewProduct(newProduct, 'name', e.target.value)}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -74,7 +76,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                   id="productPrice"
                   type="number"
                   value={newProduct.price}
-                  onChange={(e) => setNewProduct({ ...newProduct, price: parseInt(e.target.value) })}
+                  onChange={(e) => updateNewProduct(newProduct, 'price', parseInt(e.target.value))}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -86,7 +88,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                   id="productStock"
                   type="number"
                   value={newProduct.stock}
-                  onChange={(e) => setNewProduct({ ...newProduct, stock: parseInt(e.target.value) })}
+                  onChange={(e) => updateNewProduct(newProduct, 'stock', parseInt(e.target.value))}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -117,7 +119,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                           <input
                             type="text"
                             value={editingProduct.name}
-                            onChange={(e) => handleProductNameUpdate(product.id, e.target.value)}
+                            onChange={(e) => handleEditingProductUpdate(product.id, 'name', e.target.value)}
                             className="w-full p-2 border rounded"
                           />
                         </div>
@@ -126,7 +128,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                           <input
                             type="number"
                             value={editingProduct.price}
-                            onChange={(e) => handlePriceUpdate(product.id, parseInt(e.target.value))}
+                            onChange={(e) => handleEditingProductUpdate(product.id, 'price', parseInt(e.target.value))}
                             className="w-full p-2 border rounded"
                           />
                         </div>
@@ -135,7 +137,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
                           <input
                             type="number"
                             value={editingProduct.stock}
-                            onChange={(e) => handleStockUpdate(product.id, parseInt(e.target.value))}
+                            onChange={(e) => handleEditingProductUpdate(product.id, 'stock', parseInt(e.target.value))}
                             className="w-full p-2 border rounded"
                           />
                         </div>
