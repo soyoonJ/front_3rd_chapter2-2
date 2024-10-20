@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Coupon, Discount, Product } from '../../types';
 
 export const useAdmin = () => {
-  const [openProductIds, setOpenProductIds] = useState<string[]>([]);
+  const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });
   const [newCoupon, setNewCoupon] = useState<Coupon>({
