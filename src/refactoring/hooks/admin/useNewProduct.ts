@@ -3,7 +3,6 @@ import { AdminActions, Product } from '../../../types';
 import { updateProduct } from '../utils/adminUtils';
 
 export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
-  // 새 상품 추가
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({
     name: '',
@@ -11,6 +10,11 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     stock: 0,
     discounts: [],
   });
+
+  const toggleShowNewProductForm = () => {
+    setShowNewProductForm((prev) => !prev);
+  };
+
   const updateNewProduct = (
     newProduct: Omit<Product, 'id'>,
     targetKey: keyof Product,
@@ -19,6 +23,7 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     const updatedProduct = updateProduct(newProduct, targetKey, newValue);
     setNewProduct(updatedProduct);
   };
+
   const handleAddNewProduct = () => {
     const productWithId = { ...newProduct, id: Date.now().toString() };
     addProduct(productWithId);
@@ -31,5 +36,5 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     setShowNewProductForm(false);
   };
 
-  return { showNewProductForm, setShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct };
+  return { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct };
 };

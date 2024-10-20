@@ -6,13 +6,13 @@ interface Props {
 }
 
 export const NewProduct = ({ addProduct }: Props) => {
-  const { showNewProductForm, setShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct } =
+  const { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct } =
     useNewProduct(addProduct);
 
   return (
     <>
       <button
-        onClick={() => setShowNewProductForm(!showNewProductForm)}
+        onClick={toggleShowNewProductForm}
         className="bg-green-500 text-white px-4 py-2 rounded mb-4 hover:bg-green-600"
       >
         {showNewProductForm ? '취소' : '새 상품 추가'}
