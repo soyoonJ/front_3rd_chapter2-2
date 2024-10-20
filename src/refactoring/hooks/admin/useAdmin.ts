@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { AdminActions, Coupon, Discount, Product } from '../../types';
-import { updateProduct } from './utils/adminUtils';
+import { AdminActions, Coupon, Discount, Product } from '../../../types';
+import { updateProduct } from '../utils/adminUtils';
 
 export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   // 새 상품 추가
