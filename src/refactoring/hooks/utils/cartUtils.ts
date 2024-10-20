@@ -1,6 +1,8 @@
 import { CartItem, Coupon, Product } from "../../../types";
 
 const getTotalPrice = (price: number, quantity: number) => price * quantity;
+const getDiscountedPrice = (prevPrice: number, discountRate: number) =>
+	prevPrice * (1 - discountRate);
 
 export const getRemainingStock = (cart: CartItem[], product: Product) => {
 	const cartItem = cart.find((item) => item.product.id === product.id);
@@ -25,8 +27,9 @@ export const calculateItemTotal = (item: CartItem) => {
 	const { quantity } = item;
 
 	const maxApplicableDiscount = getMaxApplicableDiscount(item);
+	const totalPrice = getTotalPrice(price, quantity);
 
-	return getTotalPrice(price, quantity) * (1 - maxApplicableDiscount);
+	return getDiscountedPrice(totalPrice, maxApplicableDiscount);
 };
 
 const calculateCouponDiscount = (
@@ -46,7 +49,10 @@ const calculateCouponDiscount = (
 	if (selectedCoupon.discountType === "amount") {
 		updatedTotalAfterDiscount = Math.max(0, totalAfterDiscount - selectedCoupon.discountValue);
 	} else {
-		updatedTotalAfterDiscount *= 1 - selectedCoupon.discountValue / 100;
+		updatedTotalAfterDiscount = getDiscountedPrice(
+			updatedTotalAfterDiscount,
+			selectedCoupon.discountValue / 100
+		);
 	}
 
 	let updatedTotalDiscount = totalBeforeDiscount - updatedTotalAfterDiscount;
