@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AdminActions, Coupon, Discount, Product } from '../../../types';
+import { AdminActions, Discount, Product } from '../../../types';
 import { updateProduct } from '../utils/adminUtils';
 
 export const useAdmin = (products: Product[], adminActions: AdminActions) => {
@@ -67,23 +67,6 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
     }
   };
 
-  // 신규 쿠폰 추가
-  const [newCoupon, setNewCoupon] = useState<Coupon>({
-    name: '',
-    code: '',
-    discountType: 'percentage',
-    discountValue: 0,
-  });
-  const handleAddCoupon = () => {
-    adminActions.addCoupon(newCoupon);
-    setNewCoupon({
-      name: '',
-      code: '',
-      discountType: 'percentage',
-      discountValue: 0,
-    });
-  };
-
   return {
     openProductIds,
     toggleProductAccordion,
@@ -97,9 +80,5 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
     setNewDiscount,
     handleAddDiscount,
     handleRemoveDiscount,
-
-    newCoupon,
-    setNewCoupon,
-    handleAddCoupon,
   };
 };

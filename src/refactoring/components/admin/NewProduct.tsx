@@ -1,8 +1,8 @@
-import { Product } from '../../../types';
+import { AdminActions } from '../../../types';
 import { useNewProduct } from '../../hooks/admin/useNewProduct';
 
 interface Props {
-  addProduct: (product: Product) => void;
+  addProduct: AdminActions['addProduct'];
 }
 
 export const NewProduct = ({ addProduct }: Props) => {
