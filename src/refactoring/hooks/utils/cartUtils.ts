@@ -21,7 +21,13 @@ export const calculateItemTotal = (item: CartItem) => {
 };
 
 export const getMaxApplicableDiscount = (item: CartItem) => {
-	return 0;
+	const { discounts } = item.product;
+	const { quantity } = item;
+
+	const filteredDiscounts = discounts.filter((discount) => discount.quantity <= quantity);
+	const maxDiscount = filteredDiscounts.reduce((max, discount) => Math.max(max, discount.rate), 0);
+
+	return maxDiscount;
 };
 
 export const calculateCartTotal = (cart: CartItem[], selectedCoupon: Coupon | null) => {
