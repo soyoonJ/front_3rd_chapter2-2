@@ -22,3 +22,9 @@ export interface Coupon {
   discountType: 'amount' | 'percentage';
   discountValue: number;
 }
+
+export interface AdminActions {
+  updateProduct: (product: Product) => void;
+  addProduct: (product: Product) => void;
+  addCoupon: (coupon: Coupon) => void;
+}

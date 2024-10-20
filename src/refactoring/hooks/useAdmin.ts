@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Coupon, Discount, Product } from '../../types';
+import { AdminActions, Coupon, Discount, Product } from '../../types';
 
-export const useAdmin = () => {
+export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });
@@ -52,16 +52,89 @@ export const useAdmin = () => {
     }
   };
 
+  const handleEditComplete = () => {
+    if (editingProduct) {
+      adminActions.updateProduct(editingProduct);
+      setEditingProduct(null);
+    }
+  };
+
+  const handleStockUpdate = (productId: string, newStock: number) => {
+    const updatedProduct = products.find((p) => p.id === productId);
+    if (updatedProduct) {
+      const newProduct = { ...updatedProduct, stock: newStock };
+      adminActions.updateProduct(newProduct);
+      setEditingProduct(newProduct);
+    }
+  };
+
+  const handleAddDiscount = (productId: string) => {
+    const updatedProduct = products.find((p) => p.id === productId);
+    if (updatedProduct && editingProduct) {
+      const newProduct = {
+        ...updatedProduct,
+        discounts: [...updatedProduct.discounts, newDiscount],
+      };
+      adminActions.updateProduct(newProduct);
+      setEditingProduct(newProduct);
+      setNewDiscount({ quantity: 0, rate: 0 });
+    }
+  };
+
+  const handleRemoveDiscount = (productId: string, index: number) => {
+    const updatedProduct = products.find((p) => p.id === productId);
+    if (updatedProduct) {
+      const newProduct = {
+        ...updatedProduct,
+        discounts: updatedProduct.discounts.filter((_, i) => i !== index),
+      };
+      adminActions.updateProduct(newProduct);
+      setEditingProduct(newProduct);
+    }
+  };
+
+  const handleAddCoupon = () => {
+    adminActions.addCoupon(newCoupon);
+    setNewCoupon({
+      name: '',
+      code: '',
+      discountType: 'percentage',
+      discountValue: 0,
+    });
+  };
+
+  const handleAddNewProduct = () => {
+    const productWithId = { ...newProduct, id: Date.now().toString() };
+    adminActions.addProduct(productWithId);
+    setNewProduct({
+      name: '',
+      price: 0,
+      stock: 0,
+      discounts: [],
+    });
+    setShowNewProductForm(false);
+  };
+
   return {
     openProductIds,
     editingProduct,
     newDiscount,
+    setNewDiscount,
     newCoupon,
+    setNewCoupon,
     showNewProductForm,
+    setShowNewProductForm,
     newProduct,
+    setNewProduct,
     toggleProductAccordion,
     handleEditProduct,
     handleProductNameUpdate,
     handlePriceUpdate,
+    handleEditComplete,
+    handleStockUpdate,
+    handleAddDiscount,
+    handleRemoveDiscount,
+    handleAddCoupon,
+    handleAddNewProduct,
   };
 };
