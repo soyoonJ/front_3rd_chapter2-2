@@ -1,6 +1,7 @@
-import { CartItem, Coupon, Product } from '../../types.ts';
+import { Coupon, Product } from '../../types.ts';
 import { Layout } from '../components/layout/Layout.tsx';
 import { useCart } from '../hooks/index.ts';
+import { getMaxApplicableDiscount, getMaxDiscount, getRemainingStock } from '../hooks/utils/cartUtils.ts';
 
 interface Props {
   products: Product[];
@@ -10,28 +11,7 @@ interface Props {
 export const CartPage = ({ products, coupons }: Props) => {
   const { cart, addToCart, removeFromCart, updateQuantity, applyCoupon, calculateTotal, selectedCoupon } = useCart();
 
-  const getMaxDiscount = (discounts: { quantity: number; rate: number }[]) => {
-    return discounts.reduce((max, discount) => Math.max(max, discount.rate), 0);
-  };
-
-  const getRemainingStock = (product: Product) => {
-    const cartItem = cart.find((item) => item.product.id === product.id);
-    return product.stock - (cartItem?.quantity || 0);
-  };
-
   const { totalBeforeDiscount, totalAfterDiscount, totalDiscount } = calculateTotal();
-
-  const getAppliedDiscount = (item: CartItem) => {
-    const { discounts } = item.product;
-    const { quantity } = item;
-    let appliedDiscount = 0;
-    for (const discount of discounts) {
-      if (quantity >= discount.quantity) {
-        appliedDiscount = Math.max(appliedDiscount, discount.rate);
-      }
-    }
-    return appliedDiscount;
-  };
 
   return (
     <Layout title="장바구니">
@@ -39,7 +19,7 @@ export const CartPage = ({ products, coupons }: Props) => {
         <h2 className="text-2xl font-semibold mb-4">상품 목록</h2>
         <div className="space-y-2">
           {products.map((product) => {
-            const remainingStock = getRemainingStock(product);
+            const remainingStock = getRemainingStock(cart, product);
             return (
               <div key={product.id} data-testid={`product-${product.id}`} className="bg-white p-3 rounded shadow">
                 <div className="flex justify-between items-center mb-2">
@@ -86,7 +66,7 @@ export const CartPage = ({ products, coupons }: Props) => {
 
         <div className="space-y-2">
           {cart.map((item) => {
-            const appliedDiscount = getAppliedDiscount(item);
+            const appliedDiscount = getMaxApplicableDiscount(item);
             return (
               <div key={item.product.id} className="flex justify-between items-center bg-white p-3 rounded shadow">
                 <div>
