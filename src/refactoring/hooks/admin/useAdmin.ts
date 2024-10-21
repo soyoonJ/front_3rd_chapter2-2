@@ -29,8 +29,6 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   ) => {
     if (editingProduct && editingProduct.id === productId) {
       const updatedProduct = updateProduct(editingProduct, targetKey, newValue);
-      // TODO: stock인 경우 바로 업데이트 처리여부 확인 후 반영 필요
-      // adminActions.updateProduct(newProduct);
       setEditingProduct(updatedProduct);
     }
   };
