@@ -1,6 +1,6 @@
 import { CartItem, Coupon, Product } from '../../types';
 
-export const formatPriceToLocaleString = (price: number) => {
+export const formatCurrency = (price: number) => {
   return price.toLocaleString();
 };
 
