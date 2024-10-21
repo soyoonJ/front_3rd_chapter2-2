@@ -1,9 +1,19 @@
-import { Product } from '../../../types';
+import { Discount, Product } from '../../../types';
 
-export const updateProduct = <T extends Product | Omit<Product, 'id'>>(
-  product: T,
-  targetKey: keyof Product,
-  newValue: Product[keyof Product],
-) => {
-  return { ...product, [targetKey]: newValue };
+export const updateOpenProductIds = (prevSet: Set<string>, productId: string): Set<string> => {
+  const newSet = new Set(prevSet);
+  if (newSet.has(productId)) {
+    newSet.delete(productId);
+  } else {
+    newSet.add(productId);
+  }
+  return newSet;
+};
+
+export const getTargetProduct = (products: Product[], targetProductId: string): Product | undefined => {
+  return products.find((product) => product.id === targetProductId);
+};
+
+export const excludeTargetIndexDiscount = (discounts: Discount[], index: number) => {
+  return discounts.filter((_, i) => i !== index);
 };

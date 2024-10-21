@@ -1,20 +1,12 @@
 import { useState } from 'react';
 import { AdminActions, Discount, Product } from '../../../types';
-import { updateProduct } from '../utils/adminUtils';
+import { excludeTargetIndexDiscount, getTargetProduct, updateOpenProductIds } from '../utils/adminUtils';
 
 export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   // 상품 상세 토글
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const toggleProductAccordion = (productId: string) => {
-    setOpenProductIds((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(productId)) {
-        newSet.delete(productId);
-      } else {
-        newSet.add(productId);
-      }
-      return newSet;
-    });
+    setOpenProductIds((prev) => updateOpenProductIds(prev, productId));
   };
 
   // 상품 정보 수정
@@ -28,7 +20,7 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
     newValue: Product[keyof Product],
   ) => {
     if (editingProduct && editingProduct.id === productId) {
-      const updatedProduct = updateProduct(editingProduct, targetKey, newValue);
+      const updatedProduct = { ...editingProduct, [targetKey]: newValue };
       setEditingProduct(updatedProduct);
     }
   };
@@ -42,24 +34,24 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   // 할인 정보 추가/삭제 관련
   const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });
   const handleAddDiscount = (productId: string) => {
-    const updatedProduct = products.find((p) => p.id === productId);
-    if (updatedProduct && editingProduct) {
-      const newProduct = {
-        ...updatedProduct,
-        discounts: [...updatedProduct.discounts, newDiscount],
-      };
+    const targetProduct = getTargetProduct(products, productId);
+    if (targetProduct && editingProduct) {
+      const newProduct = { ...targetProduct, discounts: [...targetProduct.discounts, newDiscount] };
+
       adminActions.updateProduct(newProduct);
       setEditingProduct(newProduct);
       setNewDiscount({ quantity: 0, rate: 0 });
     }
   };
+  const updateDiscount = (discount: Discount, targetKey: keyof Discount, newValue: Discount[keyof Discount]) => {
+    setNewDiscount({ ...discount, [targetKey]: newValue });
+  };
   const handleRemoveDiscount = (productId: string, index: number) => {
-    const updatedProduct = products.find((p) => p.id === productId);
-    if (updatedProduct) {
-      const newProduct = {
-        ...updatedProduct,
-        discounts: updatedProduct.discounts.filter((_, i) => i !== index),
-      };
+    const targetProduct = getTargetProduct(products, productId);
+    if (targetProduct) {
+      const newDiscounts = excludeTargetIndexDiscount(targetProduct.discounts, index);
+      const newProduct = { ...targetProduct, discounts: newDiscounts };
+
       adminActions.updateProduct(newProduct);
       setEditingProduct(newProduct);
     }
@@ -75,7 +67,7 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
     handleEditComplete,
 
     newDiscount,
-    setNewDiscount,
+    updateDiscount,
     handleAddDiscount,
     handleRemoveDiscount,
   };
