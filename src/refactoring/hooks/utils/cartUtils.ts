@@ -1,5 +1,9 @@
 import { CartItem, Coupon, Product } from '../../../types';
 
+export const formatPriceToLocaleString = (price: number) => {
+  return price.toLocaleString();
+};
+
 export const getRemainingStock = (cart: CartItem[], product: Product) => {
   const cartItem = cart.find((item) => item.product.id === product.id);
   return product.stock - (cartItem?.quantity || 0);
