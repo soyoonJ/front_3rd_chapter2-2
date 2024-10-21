@@ -4,10 +4,10 @@ import { getMaxDiscount } from '../../hooks/utils/cartUtils';
 interface Props {
   product: Product;
   remainingStock: number;
-  onAddToCart: () => void;
+  addToCart: (product: Product) => void;
 }
 
-export const ProductInfo = ({ product, remainingStock, onAddToCart }: Props) => {
+export const ProductInfo = ({ product, remainingStock, addToCart }: Props) => {
   return (
     <div key={product.id} data-testid={`product-${product.id}`} className="bg-white p-3 rounded shadow">
       {/* 가격 정보 */}
@@ -41,7 +41,7 @@ export const ProductInfo = ({ product, remainingStock, onAddToCart }: Props) => 
 
       {/* 장바구니 추가 버튼 */}
       <button
-        onClick={onAddToCart}
+        onClick={() => addToCart(product)}
         className={`w-full px-3 py-1 rounded ${
           remainingStock > 0
             ? 'bg-blue-500 text-white hover:bg-blue-600'

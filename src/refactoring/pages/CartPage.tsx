@@ -24,12 +24,7 @@ export const CartPage = ({ products, coupons }: Props) => {
             const remainingStock = getRemainingStock(cart, product);
 
             return (
-              <ProductInfo
-                key={product.id}
-                product={product}
-                remainingStock={remainingStock}
-                onAddToCart={() => addToCart(product)}
-              />
+              <ProductInfo key={product.id} product={product} remainingStock={remainingStock} addToCart={addToCart} />
             );
           })}
         </div>
