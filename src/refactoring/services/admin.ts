@@ -1,4 +1,4 @@
-import { Discount, Product } from '../../../types';
+import { Discount, Product } from '../../types';
 
 export const updateOpenProductIds = (prevSet: Set<string>, productId: string): Set<string> => {
   const newSet = new Set(prevSet);

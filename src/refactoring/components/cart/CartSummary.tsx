@@ -1,4 +1,4 @@
-import { formatPriceToLocaleString } from '../../hooks/utils/cartUtils';
+import { formatPriceToLocaleString } from '../../services/cart';
 
 interface Props {
   cartTotal: {

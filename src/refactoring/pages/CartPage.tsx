@@ -5,7 +5,7 @@ import { CouponApply } from '../components/cart/CouponApply.tsx';
 import { ProductInfo } from '../components/cart/ProductInfo.tsx';
 import { Layout } from '../components/layout/Layout.tsx';
 import { useCart } from '../hooks/index.ts';
-import { getRemainingStock } from '../hooks/utils/cartUtils.ts';
+import { getRemainingStock } from '../services/cart.ts';
 
 interface Props {
   products: Product[];

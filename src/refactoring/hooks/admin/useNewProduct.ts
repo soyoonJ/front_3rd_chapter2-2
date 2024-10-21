@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AdminActions, Product } from '../../../types';
-import { createProductWithId } from '../utils/adminUtils';
+import { createProductWithId } from '../../services/admin';
 
 export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
   const [showNewProductForm, setShowNewProductForm] = useState(false);

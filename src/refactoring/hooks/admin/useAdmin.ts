@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AdminActions, Discount, Product } from '../../../types';
-import { excludeTargetIndexDiscount, getTargetProduct, updateOpenProductIds } from '../utils/adminUtils';
+import { excludeTargetIndexDiscount, getTargetProduct, updateOpenProductIds } from '../../services/admin';
 
 export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   // 상품 상세 토글

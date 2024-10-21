@@ -1,5 +1,5 @@
 import { Coupon } from '../../../types';
-import { formatDiscountValue } from '../../hooks/utils/cartUtils';
+import { formatDiscountValue } from '../../services/cart';
 
 interface Props {
   coupons: Coupon[];

@@ -1,5 +1,5 @@
 import { CartItem } from '../../../types';
-import { getMaxApplicableDiscount } from '../../hooks/utils/cartUtils';
+import { getMaxApplicableDiscount } from '../../services/cart';
 
 interface Props {
   item: CartItem;

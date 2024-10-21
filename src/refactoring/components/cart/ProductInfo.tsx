@@ -1,5 +1,5 @@
 import { Product } from '../../../types';
-import { getMaxDiscount } from '../../hooks/utils/cartUtils';
+import { getMaxDiscount } from '../../services/cart';
 
 interface Props {
   product: Product;
