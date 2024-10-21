@@ -43,8 +43,10 @@ export const useCart = () => {
     addToCart,
     removeFromCart,
     updateQuantity,
+
     selectedCoupon,
     applyCoupon,
+
     calculateTotal,
   };
 };
