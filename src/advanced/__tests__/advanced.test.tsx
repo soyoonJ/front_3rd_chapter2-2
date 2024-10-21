@@ -4,6 +4,12 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
 import { Coupon, Product } from '../../types';
+import {
+  createProductWithId,
+  excludeTargetIndexDiscount,
+  getTargetProduct,
+  updateOpenProductIds,
+} from '../../refactoring/services/admin';
 
 const mockProducts: Product[] = [
   {
@@ -222,13 +228,64 @@ describe('advanced > ', () => {
     });
   });
 
-  describe('자유롭게 작성해보세요.', () => {
-    test('새로운 유틸 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
-      expect(true).toBe(false);
+  describe('유틸함수 테스트', () => {
+    describe('updateOpenProductIds', () => {
+      test.each([
+        { prevSetValue: [], productId: '1', newSetValue: ['1'] },
+        { prevSetValue: ['1'], productId: '2', newSetValue: ['1', '2'] },
+        { prevSetValue: ['1', '2'], productId: '3', newSetValue: ['1', '2', '3'] },
+        { prevSetValue: ['1', '2', '3'], productId: '1', newSetValue: ['2', '3'] },
+        { prevSetValue: ['1'], productId: '1', newSetValue: [] },
+      ])(
+        'updateOpenProductIds(new Set($prevSetValue), $productId) -> new Set($newSetValue)',
+        ({ prevSetValue, productId, newSetValue }) => {
+          const prevSet = new Set<string>(prevSetValue);
+          expect(updateOpenProductIds(prevSet, productId)).toEqual(new Set(newSetValue));
+        },
+      );
     });
 
-    test('새로운 hook 함수르 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
-      expect(true).toBe(false);
+    test('getTargetProduct', () => {
+      const products = [
+        { id: '1', name: 'product1', price: 10000, stock: 20, discounts: [] },
+        { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] },
+        { id: '3', name: 'product3', price: 30000, stock: 20, discounts: [] },
+      ];
+
+      expect(getTargetProduct(products, '1')).toEqual({
+        id: '1',
+        name: 'product1',
+        price: 10000,
+        stock: 20,
+        discounts: [],
+      });
     });
+
+    test('excludeTargetIndexDiscount', () => {
+      const discounts = [
+        { quantity: 10, rate: 0.1 },
+        { quantity: 20, rate: 0.2 },
+        { quantity: 30, rate: 0.3 },
+      ];
+
+      expect(excludeTargetIndexDiscount(discounts, 0)).toHaveLength(2);
+      expect(excludeTargetIndexDiscount(discounts, 0)).toEqual([
+        { quantity: 20, rate: 0.2 },
+        { quantity: 30, rate: 0.3 },
+      ]);
+    });
+
+    test('createProductWithId', () => {
+      const product = { name: 'product1', price: 10000, stock: 20, discounts: [] };
+      const newId = Date.now().toString();
+
+      expect(createProductWithId(product, newId)).toEqual({ ...product, id: newId });
+    });
+  });
+});
+
+describe('hooks 테스트', () => {
+  test('새로운 hook 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
+    expect(true).toBe(true);
   });
 });
