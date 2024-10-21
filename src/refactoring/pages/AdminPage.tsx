@@ -1,7 +1,8 @@
 import { AdminActions, Coupon, Product } from '../../types.ts';
-import { Coupons } from '../components/admin/Coupons.tsx';
+import { CouponManage } from '../components/admin/CouponManage.tsx';
 import { NewProduct } from '../components/admin/NewProduct.tsx';
 import { ProductInfo } from '../components/admin/ProductInfo.tsx';
+import { Layout } from '../components/layout/Layout.tsx';
 
 interface Props {
   products: Product[];
@@ -19,28 +20,25 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">관리자 페이지</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <h2 className="text-2xl font-semibold mb-4">상품 관리</h2>
+    <Layout title="관리자 페이지">
+      <div>
+        <h2 className="text-2xl font-semibold mb-4">상품 관리</h2>
 
-          <NewProduct addProduct={onProductAdd} />
+        <NewProduct addProduct={onProductAdd} />
 
-          <div className="space-y-2">
-            {products.map((product, index) => (
-              <ProductInfo
-                key={product.id}
-                product={product}
-                index={index}
-                products={products}
-                adminActions={adminActions}
-              />
-            ))}
-          </div>
+        <div className="space-y-2">
+          {products.map((product, index) => (
+            <ProductInfo
+              key={product.id}
+              product={product}
+              index={index}
+              products={products}
+              adminActions={adminActions}
+            />
+          ))}
         </div>
-        <Coupons coupons={coupons} addCoupon={onCouponAdd} />
       </div>
-    </div>
+      <CouponManage coupons={coupons} addCoupon={onCouponAdd} />
+    </Layout>
   );
 };

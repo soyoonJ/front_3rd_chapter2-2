@@ -6,7 +6,7 @@ interface Props {
   addCoupon: AdminActions['addCoupon'];
 }
 
-export const Coupons = ({ coupons, addCoupon }: Props) => {
+export const CouponManage = ({ coupons, addCoupon }: Props) => {
   const { newCoupon, updateNewCoupon, handleAddCoupon } = useNewCoupon(addCoupon);
 
   return (
