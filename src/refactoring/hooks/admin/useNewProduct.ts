@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { AdminActions, Product } from '../../../types';
-import { updateProduct } from '../utils/adminUtils';
+import { createProductWithId } from '../utils/adminUtils';
 
 export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
   const [showNewProductForm, setShowNewProductForm] = useState(false);
@@ -20,12 +20,12 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     targetKey: keyof Product,
     newValue: Product[keyof Product],
   ) => {
-    const updatedProduct = updateProduct(newProduct, targetKey, newValue);
+    const updatedProduct = { ...newProduct, [targetKey]: newValue };
     setNewProduct(updatedProduct);
   };
 
   const handleAddNewProduct = () => {
-    const productWithId = { ...newProduct, id: Date.now().toString() };
+    const productWithId = createProductWithId(newProduct);
     addProduct(productWithId);
     setNewProduct({
       name: '',

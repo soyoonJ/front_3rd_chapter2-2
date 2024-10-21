@@ -17,3 +17,7 @@ export const getTargetProduct = (products: Product[], targetProductId: string): 
 export const excludeTargetIndexDiscount = (discounts: Discount[], index: number) => {
   return discounts.filter((_, i) => i !== index);
 };
+
+export const createProductWithId = (product: Omit<Product, 'id'>, id = Date.now().toString()) => {
+  return { ...product, id };
+};
