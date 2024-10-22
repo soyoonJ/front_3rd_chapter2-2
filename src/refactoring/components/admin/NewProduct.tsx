@@ -1,11 +1,9 @@
-import { AdminActions } from '../../../types';
 import { useNewProduct } from '../../hooks/admin/useNewProduct';
+import { useProductStore } from '../../stores/useProductStore';
 
-interface Props {
-  addProduct: AdminActions['addProduct'];
-}
+export const NewProduct = () => {
+  const addProduct = useProductStore((state) => state.addProduct);
 
-export const NewProduct = ({ addProduct }: Props) => {
   const { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct } =
     useNewProduct(addProduct);
 

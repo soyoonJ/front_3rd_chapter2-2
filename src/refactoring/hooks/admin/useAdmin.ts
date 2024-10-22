@@ -1,8 +1,12 @@
 import { useState } from 'react';
-import { AdminActions, Discount, Product } from '../../../types';
+import { Discount, Product } from '../../../types';
 import { excludeTargetIndexDiscount, getTargetProduct, updateOpenProductIds } from '../../services/admin';
+import { useProductStore } from '../../stores/useProductStore';
 
-export const useAdmin = (products: Product[], adminActions: AdminActions) => {
+export const useAdmin = () => {
+  const products = useProductStore((state) => state.products);
+  const updateProduct = useProductStore((state) => state.updateProduct);
+
   // 상품 상세 토글
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const toggleProductAccordion = (productId: string) => {
@@ -26,7 +30,7 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
   };
   const handleEditComplete = () => {
     if (editingProduct) {
-      adminActions.updateProduct(editingProduct);
+      updateProduct(editingProduct);
       setEditingProduct(null);
     }
   };
@@ -38,7 +42,7 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
     if (targetProduct && editingProduct) {
       const newProduct = { ...targetProduct, discounts: [...targetProduct.discounts, newDiscount] };
 
-      adminActions.updateProduct(newProduct);
+      updateProduct(newProduct);
       setEditingProduct(newProduct);
       setNewDiscount({ quantity: 0, rate: 0 });
     }
@@ -52,7 +56,7 @@ export const useAdmin = (products: Product[], adminActions: AdminActions) => {
       const newDiscounts = excludeTargetIndexDiscount(targetProduct.discounts, index);
       const newProduct = { ...targetProduct, discounts: newDiscounts };
 
-      adminActions.updateProduct(newProduct);
+      updateProduct(newProduct);
       setEditingProduct(newProduct);
     }
   };

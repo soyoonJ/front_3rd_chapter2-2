@@ -6,12 +6,10 @@ import { ProductInfo } from '../components/cart/ProductInfo.tsx';
 import { Layout } from '../components/layout/Layout.tsx';
 import { useCart } from '../hooks/index.ts';
 import { getRemainingStock } from '../services/cart.ts';
+import { useProductStore } from '../stores/useProductStore.ts';
 
-interface Props {
-  products: Product[];
-}
-
-export const CartPage = ({ products }: Props) => {
+export const CartPage = () => {
+  const products = useProductStore((state) => state.products);
   const { cart, addToCart, updateQuantity, removeFromCart, applyCoupon, selectedCoupon, calculateTotal } = useCart();
 
   return (

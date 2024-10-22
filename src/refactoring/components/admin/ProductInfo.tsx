@@ -1,16 +1,12 @@
-import { AdminActions, Product } from '../../../types';
+import { Product } from '../../../types';
 import { useAdmin } from '../../hooks';
 
 interface Props {
   product: Product;
   index: number;
-  products: Product[];
-  adminActions: AdminActions;
 }
 
-// TODO: products를 꼭 props로 넘겨줘야 할까...?
-// TODO: adminActions도 꼭 이렇게 받아야할까...?
-export const ProductInfo = ({ product, index, products, adminActions }: Props) => {
+export const ProductInfo = ({ product, index }: Props) => {
   const {
     openProductIds,
     toggleProductAccordion,
@@ -24,7 +20,7 @@ export const ProductInfo = ({ product, index, products, adminActions }: Props) =
     updateDiscount,
     handleAddDiscount,
     handleRemoveDiscount,
-  } = useAdmin(products, adminActions);
+  } = useAdmin();
 
   return (
     <div data-testid={`product-${index + 1}`} className="bg-white p-4 rounded shadow">
