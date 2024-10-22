@@ -237,22 +237,24 @@ describe('basic > ', () => {
     });
   });
 
-  describe('useCoupons > ', () => {
+  describe('useCouponStore > ', () => {
+    beforeEach(() => {
+      useCouponStore.setState({ coupons: mockCoupons });
+    });
+
     test('쿠폰을 초기화할 수 있다.', () => {
-      const { result } = renderHook(() => useCoupons(mockCoupons));
-      expect(result.current.coupons).toEqual(mockCoupons);
+      const { coupons } = useCouponStore.getState();
+      expect(coupons).toEqual(mockCoupons);
     });
 
     test('쿠폰을 추가할 수 있다', () => {
-      const { result } = renderHook(() => useCoupons(mockCoupons));
       const newCoupon: Coupon = { name: 'New Coupon', code: 'NEWCODE', discountType: 'amount', discountValue: 5000 };
 
-      act(() => {
-        result.current.addCoupon(newCoupon);
-      });
+      useCouponStore.getState().addCoupon(newCoupon);
 
-      expect(result.current.coupons).toHaveLength(3);
-      expect(result.current.coupons[2]).toEqual(newCoupon);
+      const { coupons } = useCouponStore.getState();
+      expect(coupons).toHaveLength(3);
+      expect(coupons[2]).toEqual(newCoupon);
     });
   });
 
