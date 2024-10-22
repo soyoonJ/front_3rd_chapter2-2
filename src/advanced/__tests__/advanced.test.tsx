@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { act, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
 import { Coupon, Product } from '../../types';
@@ -12,6 +12,7 @@ import {
 import { useProductStore } from '../../refactoring/stores/useProductStore';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
 import { formatDiscountValue } from '../../refactoring/services/coupon';
+import { useNewCoupon } from '../../refactoring/hooks';
 
 const mockProducts: Product[] = [
   {
@@ -291,8 +292,46 @@ describe('advanced > ', () => {
   });
 
   describe('hooks 테스트', () => {
-    test('새로운 hook 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
-      expect(true).toBe(true);
+    describe('useNewCoupon', () => {
+      const initialCoupon = {
+        name: '',
+        code: '',
+        discountType: 'percentage',
+        discountValue: 0,
+      };
+      const updatedCoupon: Coupon = {
+        name: 'newCoupon',
+        code: 'newCode',
+        discountType: 'amount',
+        discountValue: 5000,
+      };
+
+      test('newCoupon 초기값', () => {
+        const { result } = renderHook(() => useNewCoupon());
+
+        expect(result.current.newCoupon).toEqual(initialCoupon);
+      });
+
+      test('updateNewCoupon', () => {
+        const { result } = renderHook(() => useNewCoupon());
+
+        act(() => {
+          result.current.updateNewCoupon(updatedCoupon);
+        });
+
+        expect(result.current.newCoupon).toEqual(updatedCoupon);
+      });
+
+      test('initializeNewCoupon', () => {
+        const { result } = renderHook(() => useNewCoupon());
+
+        act(() => {
+          result.current.updateNewCoupon(updatedCoupon);
+          result.current.initializeNewCoupon();
+        });
+
+        expect(result.current.newCoupon).toEqual(initialCoupon);
+      });
     });
   });
 });
