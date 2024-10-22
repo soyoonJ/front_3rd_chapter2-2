@@ -12,7 +12,7 @@ import {
 import { useProductStore } from '../../refactoring/stores/useProductStore';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
 import { formatDiscountValue } from '../../refactoring/services/coupon';
-import { useNewCoupon } from '../../refactoring/hooks';
+import { useNewCoupon, useNewProduct } from '../../refactoring/hooks';
 
 const mockProducts: Product[] = [
   {
@@ -331,6 +331,71 @@ describe('advanced > ', () => {
         });
 
         expect(result.current.newCoupon).toEqual(initialCoupon);
+      });
+    });
+
+    describe('useNewProduct', () => {
+      const initialProduct = {
+        name: '',
+        price: 0,
+        stock: 0,
+        discounts: [],
+      };
+      const updatedNewProduct: Omit<Product, 'id'> = {
+        name: 'newProduct',
+        price: 10000,
+        stock: 20,
+        discounts: [],
+      };
+
+      test('newCoupon 초기값', () => {
+        const { result } = renderHook(() => useNewProduct());
+
+        expect(result.current.showNewProductForm).toBe(false);
+        expect(result.current.newProduct).toEqual(initialProduct);
+      });
+
+      test('toggleShowNewProductForm false -> true', () => {
+        const { result } = renderHook(() => useNewProduct());
+
+        act(() => {
+          result.current.toggleShowNewProductForm();
+        });
+
+        expect(result.current.showNewProductForm).toBe(true);
+      });
+
+      test('toggleShowNewProductForm true -> false', () => {
+        const { result } = renderHook(() => useNewProduct());
+
+        act(() => {
+          result.current.toggleShowNewProductForm();
+          result.current.toggleShowNewProductForm();
+        });
+
+        expect(result.current.showNewProductForm).toBe(false);
+      });
+
+      test('updateNewCoupon', () => {
+        const { result } = renderHook(() => useNewProduct());
+
+        act(() => {
+          result.current.updateNewProduct(updatedNewProduct);
+        });
+
+        expect(result.current.newProduct).toEqual(updatedNewProduct);
+      });
+
+      test('initializeNewCoupon', () => {
+        const { result } = renderHook(() => useNewProduct());
+
+        act(() => {
+          result.current.updateNewProduct(updatedNewProduct);
+          result.current.initializeNewProduct();
+        });
+
+        expect(result.current.showNewProductForm).toEqual(false);
+        expect(result.current.newProduct).toEqual(initialProduct);
       });
     });
   });
