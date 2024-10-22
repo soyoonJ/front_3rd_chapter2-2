@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { beforeEach, describe, expect, test } from 'vitest';
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
@@ -204,41 +204,36 @@ describe('basic > ', () => {
     });
   });
 
-  describe('useProducts > ', () => {
+  describe('useProductStore > ', () => {
     const initialProducts: Product[] = [{ id: '1', name: 'Product 1', price: 100, stock: 10, discounts: [] }];
 
+    beforeEach(() => {
+      useProductStore.setState({ products: initialProducts });
+    });
+
     test('특정 제품으로 초기화할 수 있다.', () => {
-      const { result } = renderHook(() => useProducts(initialProducts));
-      expect(result.current.products).toEqual(initialProducts);
+      const { products } = useProductStore.getState();
+      expect(products).toEqual(initialProducts);
     });
 
     test('제품을 업데이트할 수 있다.', () => {
-      const { result } = renderHook(() => useProducts(initialProducts));
       const updatedProduct = { ...initialProducts[0], name: 'Updated Product' };
 
-      act(() => {
-        result.current.updateProduct(updatedProduct);
-      });
+      useProductStore.getState().updateProduct(updatedProduct);
 
-      expect(result.current.products[0]).toEqual({
-        discounts: [],
-        id: '1',
-        name: 'Updated Product',
-        price: 100,
-        stock: 10,
-      });
+      const { products } = useProductStore.getState();
+      expect(products).toHaveLength(1);
+      expect(products[0]).toEqual(updatedProduct);
     });
 
     test('새로운 제품을 추가할 수 있다.', () => {
-      const { result } = renderHook(() => useProducts(initialProducts));
       const newProduct: Product = { id: '2', name: 'New Product', price: 200, stock: 5, discounts: [] };
 
-      act(() => {
-        result.current.addProduct(newProduct);
-      });
+      useProductStore.getState().addProduct(newProduct);
 
-      expect(result.current.products).toHaveLength(2);
-      expect(result.current.products[1]).toEqual(newProduct);
+      const { products } = useProductStore.getState();
+      expect(products).toHaveLength(2);
+      expect(products[1]).toEqual(newProduct);
     });
   });
 
