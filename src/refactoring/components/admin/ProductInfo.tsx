@@ -3,6 +3,7 @@ import { Discount, Product } from '../../../types';
 import { useAdmin } from '../../hooks';
 import { getFormattedValue } from '../../services/admin';
 import { formatRateToPercent } from '../../services';
+import { DiscountInfo } from './DiscountInfo';
 
 interface Props {
   product: Product;
@@ -127,11 +128,7 @@ export const ProductInfo = ({ product, index }: Props) => {
           ) : (
             <div>
               {product.discounts.map((discount, index) => (
-                <div key={index} className="mb-2">
-                  <span>
-                    {discount.quantity}개 이상 구매 시 {formatRateToPercent(discount.rate)}% 할인
-                  </span>
-                </div>
+                <DiscountInfo key={index} discount={discount} />
               ))}
               <button
                 data-testid="modify-button"
