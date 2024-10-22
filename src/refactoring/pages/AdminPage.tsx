@@ -1,4 +1,4 @@
-import { AdminActions, Coupon, Product } from '../../types.ts';
+import { Product } from '../../types.ts';
 import { CouponManage } from '../components/admin/CouponManage.tsx';
 import { NewProduct } from '../components/admin/NewProduct.tsx';
 import { ProductInfo } from '../components/admin/ProductInfo.tsx';
@@ -6,17 +6,14 @@ import { Layout } from '../components/layout/Layout.tsx';
 
 interface Props {
   products: Product[];
-  coupons: Coupon[];
   onProductUpdate: (updatedProduct: Product) => void;
   onProductAdd: (newProduct: Product) => void;
-  onCouponAdd: (newCoupon: Coupon) => void;
 }
 
-export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, onCouponAdd }: Props) => {
-  const adminActions: AdminActions = {
+export const AdminPage = ({ products, onProductUpdate, onProductAdd }: Props) => {
+  const adminActions = {
     updateProduct: onProductUpdate,
     addProduct: onProductAdd,
-    addCoupon: onCouponAdd,
   };
 
   return (
@@ -38,7 +35,7 @@ export const AdminPage = ({ products, coupons, onProductUpdate, onProductAdd, on
           ))}
         </div>
       </div>
-      <CouponManage coupons={coupons} addCoupon={onCouponAdd} />
+      <CouponManage />
     </Layout>
   );
 };

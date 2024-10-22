@@ -1,4 +1,4 @@
-import { Coupon, Product } from '../../types.ts';
+import { Product } from '../../types.ts';
 import { CartItemManage } from '../components/cart/CartItemManage.tsx';
 import { CartSummary } from '../components/cart/CartSummary.tsx';
 import { CouponApply } from '../components/cart/CouponApply.tsx';
@@ -9,10 +9,9 @@ import { getRemainingStock } from '../services/cart.ts';
 
 interface Props {
   products: Product[];
-  coupons: Coupon[];
 }
 
-export const CartPage = ({ products, coupons }: Props) => {
+export const CartPage = ({ products }: Props) => {
   const { cart, addToCart, updateQuantity, removeFromCart, applyCoupon, selectedCoupon, calculateTotal } = useCart();
 
   return (
@@ -46,7 +45,7 @@ export const CartPage = ({ products, coupons }: Props) => {
           })}
         </div>
 
-        <CouponApply coupons={coupons} applyCoupon={applyCoupon} selectedCoupon={selectedCoupon} />
+        <CouponApply applyCoupon={applyCoupon} selectedCoupon={selectedCoupon} />
 
         <CartSummary cartTotal={calculateTotal()} />
       </div>

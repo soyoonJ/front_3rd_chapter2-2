@@ -1,12 +1,10 @@
-import { AdminActions, Coupon } from '../../../types';
 import { useNewCoupon } from '../../hooks/admin/useNewCoupon';
+import { useCouponStore } from '../../stores/useCouponStore';
 
-interface Props {
-  coupons: Coupon[];
-  addCoupon: AdminActions['addCoupon'];
-}
+export const CouponManage = () => {
+  const coupons = useCouponStore((state) => state.coupons);
+  const addCoupon = useCouponStore((state) => state.addCoupon);
 
-export const CouponManage = ({ coupons, addCoupon }: Props) => {
   const { newCoupon, updateNewCoupon, handleAddCoupon } = useNewCoupon(addCoupon);
 
   return (

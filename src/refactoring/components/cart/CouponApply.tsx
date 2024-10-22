@@ -1,13 +1,15 @@
 import { Coupon } from '../../../types';
 import { formatDiscountValue } from '../../services/cart';
+import { useCouponStore } from '../../stores/useCouponStore';
 
 interface Props {
-  coupons: Coupon[];
   applyCoupon: (coupon: Coupon) => void;
   selectedCoupon: Coupon | null;
 }
 
-export const CouponApply = ({ coupons, applyCoupon, selectedCoupon }: Props) => {
+export const CouponApply = ({ applyCoupon, selectedCoupon }: Props) => {
+  const coupons = useCouponStore((state) => state.coupons);
+
   return (
     <div className="mt-6 bg-white p-4 rounded shadow">
       <h2 className="text-2xl font-semibold mb-2">쿠폰 적용</h2>
