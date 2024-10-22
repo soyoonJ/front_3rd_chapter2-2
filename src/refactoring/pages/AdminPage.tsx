@@ -1,7 +1,5 @@
-import { CouponManage } from '../components/admin/CouponManage.tsx';
-import { NewProduct } from '../components/admin/NewProduct.tsx';
-import { ProductInfo } from '../components/admin/ProductInfo.tsx';
-import { Layout } from '../components/layout/Layout.tsx';
+import { CouponManage, NewProduct, ProductInfo } from '../components/admin';
+import { Layout } from '../components/layout';
 import { useProductStore } from '../stores/useProductStore.ts';
 
 export const AdminPage = () => {

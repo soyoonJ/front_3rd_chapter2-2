@@ -1,9 +1,5 @@
-import { Product } from '../../types.ts';
-import { CartItemManage } from '../components/cart/CartItemManage.tsx';
-import { CartSummary } from '../components/cart/CartSummary.tsx';
-import { CouponApply } from '../components/cart/CouponApply.tsx';
-import { ProductInfo } from '../components/cart/ProductInfo.tsx';
-import { Layout } from '../components/layout/Layout.tsx';
+import { CartItemManage, CartSummary, CouponApply, ProductInfo } from '../components/cart';
+import { Layout } from '../components/layout';
 import { useCart } from '../hooks/index.ts';
 import { getRemainingStock } from '../services/cart.ts';
 import { useProductStore } from '../stores/useProductStore.ts';

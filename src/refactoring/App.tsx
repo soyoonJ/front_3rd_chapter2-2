@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { CartPage } from './pages/CartPage.tsx';
-import { AdminPage } from './pages/AdminPage.tsx';
-import { Header } from './components/layout/Header.tsx';
+import { AdminPage, CartPage } from './pages';
+import { Header } from './components/layout';
 
 const App = () => {
   const [isAdmin, setIsAdmin] = useState(false);
