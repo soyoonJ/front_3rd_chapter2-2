@@ -3,7 +3,7 @@ import { act, fireEvent, render, renderHook, screen, within } from '@testing-lib
 import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
 import { CartItem, Coupon, Product } from '../../types';
-import { useCart, useCoupons, useProducts } from '../../refactoring/hooks';
+import { useCart } from '../../refactoring/hooks';
 import * as cartUtils from '../../refactoring/services/cart';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
 import { useProductStore } from '../../refactoring/stores/useProductStore';
