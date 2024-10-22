@@ -21,3 +21,12 @@ export const excludeTargetIndexDiscount = (discounts: Discount[], index: number)
 export const createProductWithId = (product: Omit<Product, 'id'>, id = Date.now().toString()) => {
   return { ...product, id };
 };
+
+export const getFormattedValue = (name: keyof Product | keyof Discount, value: string) => {
+  if (name === 'rate') {
+    return parseInt(value) / 100;
+  } else if (name !== 'name') {
+    return parseInt(value);
+  }
+  return value;
+};

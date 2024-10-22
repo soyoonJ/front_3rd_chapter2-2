@@ -1,5 +1,7 @@
-import { Product } from '../../../types';
+import { ChangeEvent } from 'react';
+import { Discount, Product } from '../../../types';
 import { useAdmin } from '../../hooks';
+import { getFormattedValue } from '../../services/admin';
 
 interface Props {
   product: Product;
@@ -22,6 +24,13 @@ export const ProductInfo = ({ product, index }: Props) => {
     handleRemoveDiscount,
   } = useAdmin();
 
+  const handleUpdateDiscount = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    const formattedValue = getFormattedValue(name as keyof Discount, value);
+    updateDiscount({ ...newDiscount, [name]: formattedValue });
+  };
+
   return (
     <div data-testid={`product-${index + 1}`} className="bg-white p-4 rounded shadow">
       <button
@@ -39,8 +48,9 @@ export const ProductInfo = ({ product, index }: Props) => {
                 <label className="block mb-1">상품명: </label>
                 <input
                   type="text"
+                  name="name"
                   value={editingProduct.name}
-                  onChange={(e) => handleEditingProductUpdate(product.id, 'name', e.target.value)}
+                  onChange={(e) => handleEditingProductUpdate(e, product.id)}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -48,8 +58,9 @@ export const ProductInfo = ({ product, index }: Props) => {
                 <label className="block mb-1">가격: </label>
                 <input
                   type="number"
+                  name="price"
                   value={editingProduct.price}
-                  onChange={(e) => handleEditingProductUpdate(product.id, 'price', parseInt(e.target.value))}
+                  onChange={(e) => handleEditingProductUpdate(e, product.id)}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -57,8 +68,9 @@ export const ProductInfo = ({ product, index }: Props) => {
                 <label className="block mb-1">재고: </label>
                 <input
                   type="number"
+                  name="stock"
                   value={editingProduct.stock}
-                  onChange={(e) => handleEditingProductUpdate(product.id, 'stock', parseInt(e.target.value))}
+                  onChange={(e) => handleEditingProductUpdate(e, product.id)}
                   className="w-full p-2 border rounded"
                 />
               </div>
@@ -82,15 +94,17 @@ export const ProductInfo = ({ product, index }: Props) => {
                   <input
                     type="number"
                     placeholder="수량"
+                    name="quantity"
                     value={newDiscount.quantity}
-                    onChange={(e) => updateDiscount(newDiscount, 'quantity', parseInt(e.target.value))}
+                    onChange={handleUpdateDiscount}
                     className="w-1/3 p-2 border rounded"
                   />
                   <input
                     type="number"
                     placeholder="할인율 (%)"
+                    name="rate"
                     value={newDiscount.rate * 100}
-                    onChange={(e) => updateDiscount(newDiscount, 'rate', parseInt(e.target.value) / 100)}
+                    onChange={handleUpdateDiscount}
                     className="w-1/3 p-2 border rounded"
                   />
                   <button
