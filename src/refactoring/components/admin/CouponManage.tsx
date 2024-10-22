@@ -1,11 +1,22 @@
+import { ChangeEvent } from 'react';
 import { useNewCoupon } from '../../hooks/admin/useNewCoupon';
 import { useCouponStore } from '../../stores/useCouponStore';
+import { formatDiscountValue } from '../../services/coupon';
 
 export const CouponManage = () => {
   const coupons = useCouponStore((state) => state.coupons);
   const addCoupon = useCouponStore((state) => state.addCoupon);
 
-  const { newCoupon, updateNewCoupon, handleAddCoupon } = useNewCoupon(addCoupon);
+  const { newCoupon, updateNewCoupon, initializeNewCoupon } = useNewCoupon();
+
+  const handleAddCoupon = () => {
+    addCoupon(newCoupon);
+    initializeNewCoupon();
+  };
+  const handleUpdateCoupon = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    updateNewCoupon({ ...newCoupon, [name]: value });
+  };
 
   return (
     <div>
@@ -15,23 +26,24 @@ export const CouponManage = () => {
           <input
             type="text"
             placeholder="쿠폰 이름"
+            name="name"
             value={newCoupon.name}
-            onChange={(e) => updateNewCoupon({ ...newCoupon, name: e.target.value })}
+            onChange={handleUpdateCoupon}
             className="w-full p-2 border rounded"
           />
           <input
             type="text"
             placeholder="쿠폰 코드"
+            name="code"
             value={newCoupon.code}
-            onChange={(e) => updateNewCoupon({ ...newCoupon, code: e.target.value })}
+            onChange={handleUpdateCoupon}
             className="w-full p-2 border rounded"
           />
           <div className="flex gap-2">
             <select
               value={newCoupon.discountType}
-              onChange={(e) =>
-                updateNewCoupon({ ...newCoupon, discountType: e.target.value as 'amount' | 'percentage' })
-              }
+              name="discountType"
+              onChange={handleUpdateCoupon}
               className="w-full p-2 border rounded"
             >
               <option value="amount">금액(원)</option>
@@ -40,8 +52,9 @@ export const CouponManage = () => {
             <input
               type="number"
               placeholder="할인 값"
+              name="discountValue"
               value={newCoupon.discountValue}
-              onChange={(e) => updateNewCoupon({ ...newCoupon, discountValue: parseInt(e.target.value) })}
+              onChange={handleUpdateCoupon}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -55,7 +68,7 @@ export const CouponManage = () => {
             {coupons.map((coupon, index) => (
               <div key={index} data-testid={`coupon-${index + 1}`} className="bg-gray-100 p-2 rounded">
                 {coupon.name} ({coupon.code}):
-                {coupon.discountType === 'amount' ? `${coupon.discountValue}원` : `${coupon.discountValue}%`} 할인
+                {formatDiscountValue(coupon)} 할인
               </div>
             ))}
           </div>

@@ -4,10 +4,6 @@ export const formatCurrency = (price: number) => {
   return price.toLocaleString();
 };
 
-export const formatDiscountValue = (coupon: Coupon) => {
-  return coupon.discountType === 'amount' ? `${coupon.discountValue}원` : `${coupon.discountValue}%`;
-};
-
 export const getRemainingStock = (cart: CartItem[], product: Product) => {
   const cartItem = cart.find((item) => item.product.id === product.id);
   return product.stock - (cartItem?.quantity || 0);

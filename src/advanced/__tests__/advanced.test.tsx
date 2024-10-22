@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { CartPage } from '../../refactoring/pages/CartPage';
@@ -12,6 +11,7 @@ import {
 } from '../../refactoring/services/admin';
 import { useProductStore } from '../../refactoring/stores/useProductStore';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
+import { formatDiscountValue } from '../../refactoring/services/coupon';
 
 const mockProducts: Product[] = [
   {
@@ -211,63 +211,88 @@ describe('advanced > ', () => {
   });
 
   describe('유틸함수 테스트', () => {
-    describe('updateOpenProductIds', () => {
-      test.each([
-        { prevSetValue: [], productId: '1', newSetValue: ['1'] },
-        { prevSetValue: ['1'], productId: '2', newSetValue: ['1', '2'] },
-        { prevSetValue: ['1', '2'], productId: '3', newSetValue: ['1', '2', '3'] },
-        { prevSetValue: ['1', '2', '3'], productId: '1', newSetValue: ['2', '3'] },
-        { prevSetValue: ['1'], productId: '1', newSetValue: [] },
-      ])(
-        'updateOpenProductIds(new Set($prevSetValue), $productId) -> new Set($newSetValue)',
-        ({ prevSetValue, productId, newSetValue }) => {
-          const prevSet = new Set<string>(prevSetValue);
-          expect(updateOpenProductIds(prevSet, productId)).toEqual(new Set(newSetValue));
-        },
-      );
-    });
+    describe('services/admin', () => {
+      describe('updateOpenProductIds', () => {
+        test.each([
+          { prevSetValue: [], productId: '1', newSetValue: ['1'] },
+          { prevSetValue: ['1'], productId: '2', newSetValue: ['1', '2'] },
+          { prevSetValue: ['1', '2'], productId: '3', newSetValue: ['1', '2', '3'] },
+          { prevSetValue: ['1', '2', '3'], productId: '1', newSetValue: ['2', '3'] },
+          { prevSetValue: ['1'], productId: '1', newSetValue: [] },
+        ])(
+          'updateOpenProductIds(new Set($prevSetValue), $productId) -> new Set($newSetValue)',
+          ({ prevSetValue, productId, newSetValue }) => {
+            const prevSet = new Set<string>(prevSetValue);
+            expect(updateOpenProductIds(prevSet, productId)).toEqual(new Set(newSetValue));
+          },
+        );
+      });
 
-    test('getTargetProduct', () => {
-      const products = [
-        { id: '1', name: 'product1', price: 10000, stock: 20, discounts: [] },
-        { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] },
-        { id: '3', name: 'product3', price: 30000, stock: 20, discounts: [] },
-      ];
+      test('getTargetProduct', () => {
+        const products = [
+          { id: '1', name: 'product1', price: 10000, stock: 20, discounts: [] },
+          { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] },
+          { id: '3', name: 'product3', price: 30000, stock: 20, discounts: [] },
+        ];
 
-      expect(getTargetProduct(products, '1')).toEqual({
-        id: '1',
-        name: 'product1',
-        price: 10000,
-        stock: 20,
-        discounts: [],
+        expect(getTargetProduct(products, '1')).toEqual({
+          id: '1',
+          name: 'product1',
+          price: 10000,
+          stock: 20,
+          discounts: [],
+        });
+      });
+
+      test('excludeTargetIndexDiscount', () => {
+        const discounts = [
+          { quantity: 10, rate: 0.1 },
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ];
+
+        expect(excludeTargetIndexDiscount(discounts, 0)).toHaveLength(2);
+        expect(excludeTargetIndexDiscount(discounts, 0)).toEqual([
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ]);
+      });
+
+      test('createProductWithId', () => {
+        const product = { name: 'product1', price: 10000, stock: 20, discounts: [] };
+        const newId = Date.now().toString();
+
+        expect(createProductWithId(product, newId)).toEqual({ ...product, id: newId });
       });
     });
 
-    test('excludeTargetIndexDiscount', () => {
-      const discounts = [
-        { quantity: 10, rate: 0.1 },
-        { quantity: 20, rate: 0.2 },
-        { quantity: 30, rate: 0.3 },
-      ];
-
-      expect(excludeTargetIndexDiscount(discounts, 0)).toHaveLength(2);
-      expect(excludeTargetIndexDiscount(discounts, 0)).toEqual([
-        { quantity: 20, rate: 0.2 },
-        { quantity: 30, rate: 0.3 },
-      ]);
-    });
-
-    test('createProductWithId', () => {
-      const product = { name: 'product1', price: 10000, stock: 20, discounts: [] };
-      const newId = Date.now().toString();
-
-      expect(createProductWithId(product, newId)).toEqual({ ...product, id: newId });
+    describe('services/coupon', () => {
+      describe('formatDiscountValue', () => {
+        test('discountType: amount', () => {
+          const amountCoupon: Coupon = {
+            name: 'coupon1',
+            code: 'couponCode1',
+            discountType: 'amount',
+            discountValue: 5000,
+          };
+          expect(formatDiscountValue(amountCoupon)).toBe('5000원');
+        });
+        test('discountType: percentage', () => {
+          const percentageCoupon: Coupon = {
+            name: 'coupon1',
+            code: 'couponCode1',
+            discountType: 'percentage',
+            discountValue: 10,
+          };
+          expect(formatDiscountValue(percentageCoupon)).toBe('10%');
+        });
+      });
     });
   });
-});
 
-describe('hooks 테스트', () => {
-  test('새로운 hook 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
-    expect(true).toBe(true);
+  describe('hooks 테스트', () => {
+    test('새로운 hook 함수를 만든 후에 테스트 코드를 작성해서 실행해보세요', () => {
+      expect(true).toBe(true);
+    });
   });
 });

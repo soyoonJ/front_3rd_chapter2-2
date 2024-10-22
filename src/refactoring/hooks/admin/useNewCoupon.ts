@@ -1,28 +1,23 @@
 import { useState } from 'react';
-import { AdminActions, Coupon } from '../../../types';
+import { Coupon } from '../../../types';
 
-export const useNewCoupon = (addCoupon: AdminActions['addCoupon']) => {
-  // 신규 쿠폰 추가
-  const [newCoupon, setNewCoupon] = useState<Coupon>({
+export const useNewCoupon = () => {
+  const couponInitialState: Coupon = {
     name: '',
     code: '',
     discountType: 'percentage',
     discountValue: 0,
-  });
+  };
+
+  const [newCoupon, setNewCoupon] = useState<Coupon>(couponInitialState);
 
   const updateNewCoupon = (newCoupon: Coupon) => {
     setNewCoupon(newCoupon);
   };
 
-  const handleAddCoupon = () => {
-    addCoupon(newCoupon);
-    setNewCoupon({
-      name: '',
-      code: '',
-      discountType: 'percentage',
-      discountValue: 0,
-    });
+  const initializeNewCoupon = () => {
+    setNewCoupon(couponInitialState);
   };
 
-  return { newCoupon, updateNewCoupon, handleAddCoupon };
+  return { newCoupon, updateNewCoupon, initializeNewCoupon };
 };
