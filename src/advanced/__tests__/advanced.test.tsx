@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { CartPage } from '../../refactoring/pages/CartPage';
-import { AdminPage } from '../../refactoring/pages/AdminPage';
+import { AdminPage, CartPage } from '../../refactoring/pages';
 import { CartItem, Coupon, Product } from '../../types';
 import {
   createProductWithId,
@@ -9,19 +8,17 @@ import {
   getFormattedValue,
   getTargetProduct,
   updateOpenProductIds,
-} from '../../refactoring/services/admin';
-import { useProductStore } from '../../refactoring/stores/useProductStore';
-import { useCouponStore } from '../../refactoring/stores/useCouponStore';
-import { formatDiscountValue } from '../../refactoring/services/coupon';
-import { useAdmin, useNewCoupon, useNewProduct } from '../../refactoring/hooks';
-import {
   calculateCartTotal,
   calculateItemTotal,
   formatCurrency,
   getMaxApplicableDiscount,
   getRemainingStock,
   updateCartItemQuantity,
+  formatDiscountValue,
+  formatRateToPercent,
 } from '../../refactoring/services';
+import { useCouponStore, useProductStore } from '../../refactoring/stores';
+import { useAdmin, useNewCoupon, useNewProduct } from '../../refactoring/hooks';
 
 const mockProducts: Product[] = [
   {
@@ -255,43 +252,6 @@ describe('advanced > ', () => {
         );
       });
 
-      test('getTargetProduct', () => {
-        const products = [
-          { id: '1', name: 'product1', price: 10000, stock: 20, discounts: [] },
-          { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] },
-          { id: '3', name: 'product3', price: 30000, stock: 20, discounts: [] },
-        ];
-
-        expect(getTargetProduct(products, '1')).toEqual({
-          id: '1',
-          name: 'product1',
-          price: 10000,
-          stock: 20,
-          discounts: [],
-        });
-      });
-
-      test('excludeTargetIndexDiscount', () => {
-        const discounts = [
-          { quantity: 10, rate: 0.1 },
-          { quantity: 20, rate: 0.2 },
-          { quantity: 30, rate: 0.3 },
-        ];
-
-        expect(excludeTargetIndexDiscount(discounts, 0)).toHaveLength(2);
-        expect(excludeTargetIndexDiscount(discounts, 0)).toEqual([
-          { quantity: 20, rate: 0.2 },
-          { quantity: 30, rate: 0.3 },
-        ]);
-      });
-
-      test('createProductWithId', () => {
-        const product = { name: 'product1', price: 10000, stock: 20, discounts: [] };
-        const newId = Date.now().toString();
-
-        expect(createProductWithId(product, newId)).toEqual({ ...product, id: newId });
-      });
-
       test('getFormattedValue', () => {
         expect(getFormattedValue('rate', '10')).toBe(0.1);
         expect(getFormattedValue('price', '10000')).toBe(10000);
@@ -325,37 +285,6 @@ describe('advanced > ', () => {
           const updatedCart = updateCartItemQuantity(mockCart, '1', -10);
           expect(updatedCart).toHaveLength(1);
         });
-      });
-
-      test('getMaxDiscount', () => {
-        const discounts = [
-          { quantity: 10, rate: 0.1 },
-          { quantity: 20, rate: 0.2 },
-          { quantity: 30, rate: 0.3 },
-        ];
-
-        expect(discounts.reduce((max, discount) => Math.max(max, discount.rate), 0)).toBe(0.3);
-      });
-
-      test('getMaxApplicableDiscount', () => {
-        const item = {
-          product: {
-            id: '1',
-            name: 'product1',
-            price: 10000,
-            stock: 20,
-            discounts: [
-              { quantity: 10, rate: 0.1 },
-              { quantity: 20, rate: 0.2 },
-              { quantity: 30, rate: 0.3 },
-            ],
-          },
-          quantity: 25,
-        };
-
-        const maxApplicableDiscount = getMaxApplicableDiscount(item);
-
-        expect(maxApplicableDiscount).toBe(0.2);
       });
 
       test('calculateItemTotal', () => {
@@ -408,6 +337,82 @@ describe('advanced > ', () => {
           };
           expect(formatDiscountValue(percentageCoupon)).toBe('10%');
         });
+      });
+    });
+
+    describe('services/product', () => {
+      test('createProductWithId', () => {
+        const product = { name: 'product1', price: 10000, stock: 20, discounts: [] };
+        const newId = Date.now().toString();
+
+        expect(createProductWithId(product, newId)).toEqual({ ...product, id: newId });
+      });
+
+      test('getTargetProduct', () => {
+        const products = [
+          { id: '1', name: 'product1', price: 10000, stock: 20, discounts: [] },
+          { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] },
+          { id: '3', name: 'product3', price: 30000, stock: 20, discounts: [] },
+        ];
+
+        expect(getTargetProduct(products, '1')).toEqual({
+          id: '1',
+          name: 'product1',
+          price: 10000,
+          stock: 20,
+          discounts: [],
+        });
+      });
+    });
+
+    describe('services/discount', () => {
+      test('formatRateToPercent', () => {
+        expect(formatRateToPercent(0.1)).toBe('10');
+      });
+
+      test('excludeTargetIndexDiscount', () => {
+        const discounts = [
+          { quantity: 10, rate: 0.1 },
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ];
+
+        expect(excludeTargetIndexDiscount(discounts, 0)).toHaveLength(2);
+        expect(excludeTargetIndexDiscount(discounts, 0)).toEqual([
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ]);
+      });
+
+      test('getMaxDiscount', () => {
+        const discounts = [
+          { quantity: 10, rate: 0.1 },
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ];
+
+        expect(discounts.reduce((max, discount) => Math.max(max, discount.rate), 0)).toBe(0.3);
+      });
+
+      test('getMaxApplicableDiscount', () => {
+        const item = {
+          product: {
+            id: '1',
+            name: 'product1',
+            price: 10000,
+            stock: 20,
+            discounts: [
+              { quantity: 10, rate: 0.1 },
+              { quantity: 20, rate: 0.2 },
+              { quantity: 30, rate: 0.3 },
+            ],
+          },
+          quantity: 25,
+        };
+
+        const maxApplicableDiscount = getMaxApplicableDiscount(item);
+
+        expect(maxApplicableDiscount).toBe(0.2);
       });
     });
   });

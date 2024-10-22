@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { Discount, Product } from '../../../types';
-import {
-  excludeTargetIndexDiscount,
-  getFormattedValue,
-  getTargetProduct,
-  updateOpenProductIds,
-} from '../../services/admin';
+import { excludeTargetIndexDiscount, getFormattedValue, getTargetProduct, updateOpenProductIds } from '../../services';
 import { useProductStore } from '../../stores/useProductStore';
 
 export const useAdmin = () => {

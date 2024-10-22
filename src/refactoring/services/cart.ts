@@ -1,4 +1,5 @@
 import { CartItem, Coupon, Product } from '../../types';
+import { getMaxApplicableDiscount } from './discount';
 
 export const formatCurrency = (price: number) => {
   return price.toLocaleString();
@@ -23,18 +24,6 @@ export const updateCartItemQuantity = (cart: CartItem[], productId: string, newQ
 };
 
 // 상품 가격 및 할인 관련 ========================================================
-
-export const getMaxDiscount = (discounts: { quantity: number; rate: number }[]) => {
-  return discounts.reduce((max, discount) => Math.max(max, discount.rate), 0);
-};
-export const getMaxApplicableDiscount = (item: CartItem): number => {
-  const { discounts } = item.product;
-  const { quantity } = item;
-
-  const filteredDiscounts = discounts.filter((discount) => discount.quantity <= quantity);
-
-  return getMaxDiscount(filteredDiscounts);
-};
 
 const getDiscountedPrice = (prevPrice: number, discountRate: number) => prevPrice * (1 - discountRate);
 const getTotalPrice = (price: number, quantity: number) => price * quantity;

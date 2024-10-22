@@ -1,5 +1,5 @@
 import { Product } from '../../../types';
-import { getMaxDiscount } from '../../services/cart';
+import { formatRateToPercent, getMaxDiscount } from '../../services';
 
 interface Props {
   product: Product;
@@ -23,7 +23,7 @@ export const ProductInfo = ({ product, remainingStock, addToCart }: Props) => {
         </span>
         {product.discounts.length > 0 && (
           <span className="ml-2 font-medium text-blue-600">
-            최대 {(getMaxDiscount(product.discounts) * 100).toFixed(0)}% 할인
+            최대 {formatRateToPercent(getMaxDiscount(product.discounts))}% 할인
           </span>
         )}
       </div>
@@ -33,7 +33,7 @@ export const ProductInfo = ({ product, remainingStock, addToCart }: Props) => {
         <ul className="list-disc list-inside text-sm text-gray-500 mb-2">
           {product.discounts.map((discount, index) => (
             <li key={index}>
-              {discount.quantity}개 이상: {(discount.rate * 100).toFixed(0)}% 할인
+              {discount.quantity}개 이상: {formatRateToPercent(discount.rate)}% 할인
             </li>
           ))}
         </ul>

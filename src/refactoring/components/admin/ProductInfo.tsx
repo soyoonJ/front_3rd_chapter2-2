@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import { Discount, Product } from '../../../types';
 import { useAdmin } from '../../hooks';
 import { getFormattedValue } from '../../services/admin';
+import { formatRateToPercent } from '../../services';
 
 interface Props {
   product: Product;
@@ -40,6 +41,7 @@ export const ProductInfo = ({ product, index }: Props) => {
       >
         {product.name} - {product.price}원 (재고: {product.stock})
       </button>
+
       {openProductIds.has(product.id) && (
         <div className="mt-2">
           {editingProduct && editingProduct.id === product.id ? (
@@ -80,7 +82,7 @@ export const ProductInfo = ({ product, index }: Props) => {
                 {editingProduct.discounts.map((discount, index) => (
                   <div key={index} className="flex justify-between items-center mb-2">
                     <span>
-                      {discount.quantity}개 이상 구매 시 {discount.rate * 100}% 할인
+                      {discount.quantity}개 이상 구매 시 {formatRateToPercent(discount.rate)}% 할인
                     </span>
                     <button
                       onClick={() => handleRemoveDiscount(product.id, index)}
@@ -103,7 +105,7 @@ export const ProductInfo = ({ product, index }: Props) => {
                     type="number"
                     placeholder="할인율 (%)"
                     name="rate"
-                    value={newDiscount.rate * 100}
+                    value={formatRateToPercent(newDiscount.rate)}
                     onChange={handleUpdateDiscount}
                     className="w-1/3 p-2 border rounded"
                   />
@@ -127,7 +129,7 @@ export const ProductInfo = ({ product, index }: Props) => {
               {product.discounts.map((discount, index) => (
                 <div key={index} className="mb-2">
                   <span>
-                    {discount.quantity}개 이상 구매 시 {discount.rate * 100}% 할인
+                    {discount.quantity}개 이상 구매 시 {formatRateToPercent(discount.rate)}% 할인
                   </span>
                 </div>
               ))}

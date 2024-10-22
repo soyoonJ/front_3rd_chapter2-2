@@ -10,18 +10,6 @@ export const updateOpenProductIds = (prevSet: Set<string>, productId: string): S
   return newSet;
 };
 
-export const getTargetProduct = (products: Product[], targetProductId: string): Product | undefined => {
-  return products.find((product) => product.id === targetProductId);
-};
-
-export const excludeTargetIndexDiscount = (discounts: Discount[], index: number) => {
-  return discounts.filter((_, i) => i !== index);
-};
-
-export const createProductWithId = (product: Omit<Product, 'id'>, id = Date.now().toString()) => {
-  return { ...product, id };
-};
-
 export const getFormattedValue = (name: keyof Product | keyof Discount, value: string) => {
   if (name === 'rate') {
     return parseInt(value) / 100;
