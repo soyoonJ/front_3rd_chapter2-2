@@ -5,7 +5,32 @@ import { AdminPage } from '../../refactoring/pages/AdminPage';
 import { CartItem, Coupon, Product } from '../../types';
 import { useCart, useCoupons, useProducts } from '../../refactoring/hooks';
 import * as cartUtils from '../../refactoring/services/cart';
+import { useCouponStore } from '../../refactoring/stores/useCouponStore';
+import { useProductStore } from '../../refactoring/stores/useProductStore';
 
+const mockProducts: Product[] = [
+  {
+    id: 'p1',
+    name: '상품1',
+    price: 10000,
+    stock: 20,
+    discounts: [{ quantity: 10, rate: 0.1 }],
+  },
+  {
+    id: 'p2',
+    name: '상품2',
+    price: 20000,
+    stock: 20,
+    discounts: [{ quantity: 10, rate: 0.15 }],
+  },
+  {
+    id: 'p3',
+    name: '상품3',
+    price: 30000,
+    stock: 20,
+    discounts: [{ quantity: 10, rate: 0.2 }],
+  },
+];
 const mockCoupons: Coupon[] = [
   {
     name: '5000원 할인 쿠폰',
@@ -26,6 +51,8 @@ const TestAdminPage = () => {
 };
 
 describe('basic > ', () => {
+  useCouponStore.setState({ coupons: mockCoupons });
+  useProductStore.setState({ products: mockProducts });
   describe('시나리오 테스트 > ', () => {
     test('장바구니 페이지 테스트 > ', async () => {
       render(<CartPage />);
