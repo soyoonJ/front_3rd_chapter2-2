@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
-import { Coupon, Product } from '../../types';
+import { CartItem, Coupon, Product } from '../../types';
 import {
   createProductWithId,
   excludeTargetIndexDiscount,
@@ -14,6 +14,14 @@ import { useProductStore } from '../../refactoring/stores/useProductStore';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
 import { formatDiscountValue } from '../../refactoring/services/coupon';
 import { useAdmin, useNewCoupon, useNewProduct } from '../../refactoring/hooks';
+import {
+  calculateCartTotal,
+  calculateItemTotal,
+  formatCurrency,
+  getMaxApplicableDiscount,
+  getRemainingStock,
+  updateCartItemQuantity,
+} from '../../refactoring/services';
 
 const mockProducts: Product[] = [
   {
@@ -51,6 +59,23 @@ const mockCoupons: Coupon[] = [
     discountType: 'percentage',
     discountValue: 10,
   },
+];
+const mockCart: CartItem[] = [
+  {
+    product: {
+      id: '1',
+      name: 'product1',
+      price: 10000,
+      stock: 20,
+      discounts: [
+        { quantity: 10, rate: 0.1 },
+        { quantity: 20, rate: 0.2 },
+        { quantity: 30, rate: 0.3 },
+      ],
+    },
+    quantity: 40,
+  },
+  { product: { id: '2', name: 'product2', price: 20000, stock: 20, discounts: [] }, quantity: 10 },
 ];
 
 const TestAdminPage = () => {
@@ -271,6 +296,95 @@ describe('advanced > ', () => {
         expect(getFormattedValue('rate', '10')).toBe(0.1);
         expect(getFormattedValue('price', '10000')).toBe(10000);
         expect(getFormattedValue('name', 'product1')).toBe('product1');
+      });
+    });
+
+    describe('services/cart', () => {
+      test('formatCurrency', () => {
+        expect(formatCurrency(10000)).toBe('10,000');
+      });
+
+      test('getRemainingStock', () => {
+        const product = { id: '1', name: 'product1', price: 10000, stock: 50, discounts: [] };
+
+        expect(getRemainingStock(mockCart, product)).toBe(10);
+      });
+
+      describe('updateCartItemQuantity', () => {
+        test('newQuantity가 0보다 클 때', () => {
+          const updatedCartQuantity = updateCartItemQuantity(mockCart, '1', 15)[0].quantity;
+          expect(updatedCartQuantity).toEqual(15);
+        });
+
+        test('newQuantity가 0일 때', () => {
+          const updatedCart = updateCartItemQuantity(mockCart, '1', 0);
+          expect(updatedCart).toHaveLength(1);
+        });
+
+        test('newQuantity가 마이너스일 때', () => {
+          const updatedCart = updateCartItemQuantity(mockCart, '1', -10);
+          expect(updatedCart).toHaveLength(1);
+        });
+      });
+
+      test('getMaxDiscount', () => {
+        const discounts = [
+          { quantity: 10, rate: 0.1 },
+          { quantity: 20, rate: 0.2 },
+          { quantity: 30, rate: 0.3 },
+        ];
+
+        expect(discounts.reduce((max, discount) => Math.max(max, discount.rate), 0)).toBe(0.3);
+      });
+
+      test('getMaxApplicableDiscount', () => {
+        const item = {
+          product: {
+            id: '1',
+            name: 'product1',
+            price: 10000,
+            stock: 20,
+            discounts: [
+              { quantity: 10, rate: 0.1 },
+              { quantity: 20, rate: 0.2 },
+              { quantity: 30, rate: 0.3 },
+            ],
+          },
+          quantity: 25,
+        };
+
+        const maxApplicableDiscount = getMaxApplicableDiscount(item);
+
+        expect(maxApplicableDiscount).toBe(0.2);
+      });
+
+      test('calculateItemTotal', () => {
+        const item = {
+          product: {
+            id: '1',
+            name: 'product1',
+            price: 10000,
+            stock: 20,
+            discounts: [
+              { quantity: 10, rate: 0.1 },
+              { quantity: 20, rate: 0.2 }, // 적용됨
+              { quantity: 30, rate: 0.3 },
+            ],
+          },
+          quantity: 25,
+        };
+
+        const itemTotal = calculateItemTotal(item);
+        expect(itemTotal).toBe(200000);
+      });
+
+      test('calculateCartTotal', () => {
+        const cartTotal = calculateCartTotal(mockCart, mockCoupons[0]);
+        expect(cartTotal).toEqual({
+          totalAfterDiscount: 475000,
+          totalBeforeDiscount: 600000,
+          totalDiscount: 125000,
+        });
       });
     });
 
