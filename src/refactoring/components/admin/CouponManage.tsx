@@ -13,7 +13,7 @@ export const CouponManage = () => {
     addCoupon(newCoupon);
     initializeNewCoupon();
   };
-  const handleUpdateCoupon = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleUpdateNewCoupon = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     updateNewCoupon({ ...newCoupon, [name]: value });
   };
@@ -28,7 +28,7 @@ export const CouponManage = () => {
             placeholder="쿠폰 이름"
             name="name"
             value={newCoupon.name}
-            onChange={handleUpdateCoupon}
+            onChange={handleUpdateNewCoupon}
             className="w-full p-2 border rounded"
           />
           <input
@@ -36,14 +36,14 @@ export const CouponManage = () => {
             placeholder="쿠폰 코드"
             name="code"
             value={newCoupon.code}
-            onChange={handleUpdateCoupon}
+            onChange={handleUpdateNewCoupon}
             className="w-full p-2 border rounded"
           />
           <div className="flex gap-2">
             <select
               value={newCoupon.discountType}
               name="discountType"
-              onChange={handleUpdateCoupon}
+              onChange={handleUpdateNewCoupon}
               className="w-full p-2 border rounded"
             >
               <option value="amount">금액(원)</option>
@@ -54,7 +54,7 @@ export const CouponManage = () => {
               placeholder="할인 값"
               name="discountValue"
               value={newCoupon.discountValue}
-              onChange={handleUpdateCoupon}
+              onChange={handleUpdateNewCoupon}
               className="w-full p-2 border rounded"
             />
           </div>
