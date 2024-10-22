@@ -1,11 +1,22 @@
+import { ChangeEvent } from 'react';
 import { useNewProduct } from '../../hooks/admin/useNewProduct';
+import { createProductWithId } from '../../services/admin';
 import { useProductStore } from '../../stores/useProductStore';
 
 export const NewProduct = () => {
   const addProduct = useProductStore((state) => state.addProduct);
 
-  const { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct } =
-    useNewProduct(addProduct);
+  const { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, initializeNewProduct } =
+    useNewProduct();
+
+  const handleAddNewProduct = () => {
+    initializeNewProduct();
+    addProduct(createProductWithId(newProduct));
+  };
+  const handleUpdateNewProduct = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    updateNewProduct({ ...newProduct, [name]: value });
+  };
 
   return (
     <>
@@ -26,8 +37,9 @@ export const NewProduct = () => {
             <input
               id="productName"
               type="text"
+              name="name"
               value={newProduct.name}
-              onChange={(e) => updateNewProduct(newProduct, 'name', e.target.value)}
+              onChange={handleUpdateNewProduct}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -38,8 +50,9 @@ export const NewProduct = () => {
             <input
               id="productPrice"
               type="number"
+              name="price"
               value={newProduct.price}
-              onChange={(e) => updateNewProduct(newProduct, 'price', parseInt(e.target.value))}
+              onChange={handleUpdateNewProduct}
               className="w-full p-2 border rounded"
             />
           </div>
@@ -50,8 +63,9 @@ export const NewProduct = () => {
             <input
               id="productStock"
               type="number"
+              name="stock"
               value={newProduct.stock}
-              onChange={(e) => updateNewProduct(newProduct, 'stock', parseInt(e.target.value))}
+              onChange={handleUpdateNewProduct}
               className="w-full p-2 border rounded"
             />
           </div>

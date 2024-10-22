@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import { AdminActions, Product } from '../../../types';
-import { createProductWithId } from '../../services/admin';
+import { Product } from '../../../types';
 
-export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
+export const useNewProduct = () => {
   const [showNewProductForm, setShowNewProductForm] = useState(false);
   const [newProduct, setNewProduct] = useState<Omit<Product, 'id'>>({
     name: '',
@@ -15,18 +14,11 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     setShowNewProductForm((prev) => !prev);
   };
 
-  const updateNewProduct = (
-    newProduct: Omit<Product, 'id'>,
-    targetKey: keyof Product,
-    newValue: Product[keyof Product],
-  ) => {
-    const updatedProduct = { ...newProduct, [targetKey]: newValue };
+  const updateNewProduct = (updatedProduct: Omit<Product, 'id'>) => {
     setNewProduct(updatedProduct);
   };
 
-  const handleAddNewProduct = () => {
-    const productWithId = createProductWithId(newProduct);
-    addProduct(productWithId);
+  const initializeNewProduct = () => {
     setNewProduct({
       name: '',
       price: 0,
@@ -36,5 +28,5 @@ export const useNewProduct = (addProduct: AdminActions['addProduct']) => {
     setShowNewProductForm(false);
   };
 
-  return { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, handleAddNewProduct };
+  return { showNewProductForm, toggleShowNewProductForm, newProduct, updateNewProduct, initializeNewProduct };
 };
