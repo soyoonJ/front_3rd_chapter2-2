@@ -1,27 +1,15 @@
 import { create } from 'zustand';
 import { Coupon } from '../../types';
+import initialCoupons from '../data/coupons.json';
 
 interface CouponState {
   coupons: Coupon[];
   addCoupon: (newCoupon: Coupon) => void;
 }
 
-const initialCoupons: Coupon[] = [
-  {
-    name: '5000원 할인 쿠폰',
-    code: 'AMOUNT5000',
-    discountType: 'amount',
-    discountValue: 5000,
-  },
-  {
-    name: '10% 할인 쿠폰',
-    code: 'PERCENT10',
-    discountType: 'percentage',
-    discountValue: 10,
-  },
-];
-
 export const useCouponStore = create<CouponState>()((set) => ({
-  coupons: initialCoupons,
+  // json에서 string으로 넘어오는 discountType 때문에 타입 단언 필요
+  // 실제 initialCoupons 데이터는 Coupon 타입 유지하고 있음
+  coupons: initialCoupons as Coupon[],
   addCoupon: (newCoupon) => set((state) => ({ coupons: [...state.coupons, newCoupon] })),
 }));
