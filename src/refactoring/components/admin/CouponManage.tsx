@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import { useNewCoupon } from '../../hooks/admin/useNewCoupon';
 import { useCouponStore } from '../../stores/useCouponStore';
 import { formatDiscountValue } from '../../services/coupon';
+import { CouponInfo } from './CouponInfo';
 
 export const CouponManage = () => {
   const coupons = useCouponStore((state) => state.coupons);
@@ -66,10 +67,7 @@ export const CouponManage = () => {
           <h3 className="text-lg font-semibold mb-2">현재 쿠폰 목록</h3>
           <div className="space-y-2">
             {coupons.map((coupon, index) => (
-              <div key={index} data-testid={`coupon-${index + 1}`} className="bg-gray-100 p-2 rounded">
-                {coupon.name} ({coupon.code}):
-                {formatDiscountValue(coupon)} 할인
-              </div>
+              <CouponInfo key={index} coupon={coupon} index={index} />
             ))}
           </div>
         </div>

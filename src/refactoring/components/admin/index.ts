@@ -1,3 +1,4 @@
+export * from './CouponInfo';
 export * from './CouponManage';
 export * from './DiscountInfo';
 export * from './EditDiscountInfo';
