@@ -1,4 +1,4 @@
-import { formatCurrency } from '../../services/cart';
+import { formatCurrency } from '../../../services';
 
 interface Props {
   cartTotal: {

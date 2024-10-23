@@ -1,5 +1,5 @@
-import { Product } from '../../../types';
-import { formatRateToPercent, getMaxDiscount } from '../../services';
+import { Product } from '../../../../types';
+import { formatRateToPercent, getMaxDiscount } from '../../../services';
 
 interface Props {
   product: Product;
