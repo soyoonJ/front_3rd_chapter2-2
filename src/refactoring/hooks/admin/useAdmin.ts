@@ -11,9 +11,10 @@ export const useAdmin = () => {
 
   // 상품 정보 수정
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const updateEditingProduct = (product: Product) => {
-    setEditingProduct({ ...product });
+  const updateEditingProduct = (product: Product | null) => {
+    setEditingProduct(product);
   };
+
   const handleEditingProductUpdate = (e: React.ChangeEvent<HTMLInputElement>, productId: string) => {
     if (!editingProduct || editingProduct.id !== productId) return;
 
@@ -23,9 +24,6 @@ export const useAdmin = () => {
     const updatedProduct = { ...editingProduct, [name]: formattedValue };
     setEditingProduct(updatedProduct);
   };
-  const editComplete = () => {
-    setEditingProduct(null);
-  };
 
   return {
     openProductIds,
@@ -34,6 +32,5 @@ export const useAdmin = () => {
     editingProduct,
     updateEditingProduct,
     handleEditingProductUpdate,
-    editComplete,
   };
 };

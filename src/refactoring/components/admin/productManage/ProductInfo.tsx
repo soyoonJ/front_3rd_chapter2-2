@@ -23,7 +23,6 @@ export const ProductInfo = ({ product, index }: Props) => {
     editingProduct,
     updateEditingProduct,
     handleEditingProductUpdate,
-    editComplete,
   } = useAdmin();
 
   const handleUpdateDiscount = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +35,7 @@ export const ProductInfo = ({ product, index }: Props) => {
     if (!editingProduct) return;
 
     updateProduct(editingProduct);
-    editComplete();
+    updateEditingProduct(null);
   };
   const handleAddComplete = (productId: string) => {
     const targetProduct = getTargetProduct(products, productId);

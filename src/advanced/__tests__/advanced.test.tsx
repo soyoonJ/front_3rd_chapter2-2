@@ -570,30 +570,6 @@ describe('advanced > ', () => {
 
         expect(result.current.editingProduct).toEqual({ ...mockProducts[0], name: 'newName' });
       });
-
-      describe('editComplete', () => {
-        test('editingProduct가 null일 때', () => {
-          const { result } = renderHook(() => useAdmin());
-
-          act(() => {
-            result.current.editComplete();
-          });
-
-          expect(result.current.editingProduct).toBeNull();
-        });
-        test('editingProduct가 null이 아닐 때', () => {
-          const { result } = renderHook(() => useAdmin());
-
-          act(() => {
-            result.current.updateEditingProduct(mockProducts[0]);
-          });
-          act(() => {
-            result.current.editComplete();
-          });
-
-          expect(result.current.editingProduct).toBeNull();
-        });
-      });
     });
 
     describe('useNewDiscount', () => {
