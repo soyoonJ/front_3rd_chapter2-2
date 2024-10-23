@@ -1,5 +1,7 @@
 import { Product } from '../../../../types';
 import { formatRateToPercent, getMaxDiscount } from '../../../services';
+import { AddToCartButton } from './AddToCartButton';
+import DiscountInfo from './DiscountInfo';
 
 interface Props {
   product: Product;
@@ -32,25 +34,14 @@ export const ProductInfo = ({ product, remainingStock, addToCart }: Props) => {
       {product.discounts.length > 0 && (
         <ul className="list-disc list-inside text-sm text-gray-500 mb-2">
           {product.discounts.map((discount, index) => (
-            <li key={index}>
-              {discount.quantity}개 이상: {formatRateToPercent(discount.rate)}% 할인
-            </li>
+            <DiscountInfo key={index} discount={discount} />
           ))}
         </ul>
       )}
 
-      {/* 장바구니 추가 버튼 */}
-      <button
-        onClick={() => addToCart(product)}
-        className={`w-full px-3 py-1 rounded ${
-          remainingStock > 0
-            ? 'bg-blue-500 text-white hover:bg-blue-600'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }`}
-        disabled={remainingStock <= 0}
-      >
+      <AddToCartButton onClick={() => addToCart(product)} disabled={remainingStock <= 0}>
         {remainingStock > 0 ? '장바구니에 추가' : '품절'}
-      </button>
+      </AddToCartButton>
     </div>
   );
 };
