@@ -1,12 +1,12 @@
-import { Discount } from '../../../types';
-import { formatRateToPercent } from '../../services';
+import { Discount } from '../../../../types';
+import { formatRateToPercent } from '../../../services';
 
 interface Props {
   discount: Discount;
   onClick: () => void;
 }
 
-export const EditDiscountInfo = ({ discount, onClick }: Props) => {
+export const DiscountInfoEdit = ({ discount, onClick }: Props) => {
   return (
     <div className="flex justify-between items-center mb-2">
       <span>

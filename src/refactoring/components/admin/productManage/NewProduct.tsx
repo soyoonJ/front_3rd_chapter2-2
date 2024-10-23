@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
-import { useNewProduct } from '../../hooks/admin/useNewProduct';
-import { createProductWithId } from '../../services';
-import { useProductStore } from '../../stores/useProductStore';
+import { useNewProduct } from '../../../hooks/admin/useNewProduct';
+import { createProductWithId } from '../../../services';
+import { useProductStore } from '../../../stores/useProductStore';
 
 export const NewProduct = () => {
   const addProduct = useProductStore((state) => state.addProduct);

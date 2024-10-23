@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
-import { useNewCoupon } from '../../hooks/admin/useNewCoupon';
-import { useCouponStore } from '../../stores/useCouponStore';
+import { useNewCoupon } from '../../../hooks/admin/useNewCoupon';
+import { useCouponStore } from '../../../stores/useCouponStore';
 import { CouponInfo } from './CouponInfo';
 
 export const CouponManage = () => {
