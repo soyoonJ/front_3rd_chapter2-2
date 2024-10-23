@@ -1,8 +1,10 @@
 import { ChangeEvent } from 'react';
 import { Discount, Product } from '../../../../types';
-import { useAdmin } from '../../../hooks';
+import { useAdmin, useNewDiscount } from '../../../hooks';
 import { getFormattedValue } from '../../../services/admin';
 import { ProductInfoSummary, ProductInfoDetail, ProductInfoEdit } from '..';
+import { useProductStore } from '../../../stores';
+import { excludeTargetIndexDiscount, getTargetProduct } from '../../../services';
 
 interface Props {
   product: Product;
@@ -10,19 +12,18 @@ interface Props {
 }
 
 export const ProductInfo = ({ product, index }: Props) => {
+  const products = useProductStore((state) => state.products);
+  const updateProduct = useProductStore((state) => state.updateProduct);
+
+  const { newDiscount, updateDiscount, addDiscount } = useNewDiscount();
   const {
     openProductIds,
     toggleProductAccordion,
 
     editingProduct,
-    handleEditProduct,
+    updateEditingProduct,
     handleEditingProductUpdate,
-    handleEditComplete,
-
-    newDiscount,
-    updateDiscount,
-    handleAddDiscount,
-    handleRemoveDiscount,
+    editComplete,
   } = useAdmin();
 
   const handleUpdateDiscount = (e: ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +31,32 @@ export const ProductInfo = ({ product, index }: Props) => {
 
     const formattedValue = getFormattedValue(name as keyof Discount, value);
     updateDiscount({ ...newDiscount, [name]: formattedValue });
+  };
+  const handleEditComplete = () => {
+    if (!editingProduct) return;
+
+    updateProduct(editingProduct);
+    editComplete();
+  };
+  const handleAddComplete = (productId: string) => {
+    const targetProduct = getTargetProduct(products, productId);
+    if (!targetProduct || !editingProduct) return;
+
+    const newProduct = { ...targetProduct, discounts: [...targetProduct.discounts, newDiscount] };
+
+    updateEditingProduct(newProduct);
+    updateProduct(newProduct);
+    addDiscount();
+  };
+  const handleRemoveDiscount = (productId: string, index: number) => {
+    const targetProduct = getTargetProduct(products, productId);
+    if (!targetProduct) return;
+
+    const newDiscounts = excludeTargetIndexDiscount(targetProduct.discounts, index);
+    const newProduct = { ...targetProduct, discounts: newDiscounts };
+
+    updateProduct(newProduct);
+    updateEditingProduct(newProduct);
   };
 
   return (
@@ -47,11 +74,11 @@ export const ProductInfo = ({ product, index }: Props) => {
               newDiscount={newDiscount}
               onChangeDiscount={handleUpdateDiscount}
               onRemoveDiscount={() => handleRemoveDiscount(product.id, index)}
-              onAddDiscount={() => handleAddDiscount(product.id)}
+              onAddDiscount={() => handleAddComplete(product.id)}
               onEditComplete={handleEditComplete}
             />
           ) : (
-            <ProductInfoDetail product={product} onEdit={() => handleEditProduct(product)} />
+            <ProductInfoDetail product={product} onEdit={() => updateEditingProduct(product)} />
           )}
         </div>
       )}

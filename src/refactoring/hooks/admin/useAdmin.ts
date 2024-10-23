@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import { Discount, Product } from '../../../types';
-import { excludeTargetIndexDiscount, getFormattedValue, getTargetProduct, updateOpenProductIds } from '../../services';
-import { useProductStore } from '../../stores/useProductStore';
+import { getFormattedValue, updateOpenProductIds } from '../../services';
 
 export const useAdmin = () => {
-  const products = useProductStore((state) => state.products);
-  const updateProduct = useProductStore((state) => state.updateProduct);
-
   // 상품 상세 토글
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());
   const toggleProductAccordion = (productId: string) => {
@@ -15,7 +11,7 @@ export const useAdmin = () => {
 
   // 상품 정보 수정
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const handleEditProduct = (product: Product) => {
+  const updateEditingProduct = (product: Product) => {
     setEditingProduct({ ...product });
   };
   const handleEditingProductUpdate = (e: React.ChangeEvent<HTMLInputElement>, productId: string) => {
@@ -27,37 +23,8 @@ export const useAdmin = () => {
     const updatedProduct = { ...editingProduct, [name]: formattedValue };
     setEditingProduct(updatedProduct);
   };
-  const handleEditComplete = () => {
-    if (!editingProduct) return;
-
-    updateProduct(editingProduct);
+  const editComplete = () => {
     setEditingProduct(null);
-  };
-
-  // 할인 정보 추가/삭제 관련
-  const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });
-  const updateDiscount = (updatedDiscount: Discount) => {
-    setNewDiscount(updatedDiscount);
-  };
-  const handleAddDiscount = (productId: string) => {
-    const targetProduct = getTargetProduct(products, productId);
-    if (targetProduct && editingProduct) {
-      const newProduct = { ...targetProduct, discounts: [...targetProduct.discounts, newDiscount] };
-
-      updateProduct(newProduct);
-      setEditingProduct(newProduct);
-      setNewDiscount({ quantity: 0, rate: 0 });
-    }
-  };
-  const handleRemoveDiscount = (productId: string, index: number) => {
-    const targetProduct = getTargetProduct(products, productId);
-    if (targetProduct) {
-      const newDiscounts = excludeTargetIndexDiscount(targetProduct.discounts, index);
-      const newProduct = { ...targetProduct, discounts: newDiscounts };
-
-      updateProduct(newProduct);
-      setEditingProduct(newProduct);
-    }
   };
 
   return {
@@ -65,13 +32,8 @@ export const useAdmin = () => {
     toggleProductAccordion,
 
     editingProduct,
-    handleEditProduct,
+    updateEditingProduct,
     handleEditingProductUpdate,
-    handleEditComplete,
-
-    newDiscount,
-    updateDiscount,
-    handleAddDiscount,
-    handleRemoveDiscount,
+    editComplete,
   };
 };

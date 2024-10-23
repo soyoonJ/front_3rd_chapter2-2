@@ -18,7 +18,7 @@ import {
   formatRateToPercent,
 } from '../../refactoring/services';
 import { useCouponStore, useProductStore } from '../../refactoring/stores';
-import { useAdmin, useNewCoupon, useNewProduct } from '../../refactoring/hooks';
+import { useAdmin, useNewCoupon, useNewDiscount, useNewProduct } from '../../refactoring/hooks';
 
 const mockProducts: Product[] = [
   {
@@ -528,14 +528,11 @@ describe('advanced > ', () => {
     });
 
     describe('useAdmin', () => {
-      const initialNewDiscount = { quantity: 0, rate: 0 };
-
       test('useAdmin state 초기값', () => {
         const { result } = renderHook(() => useAdmin());
 
         expect(result.current.openProductIds).toBeInstanceOf(Set);
         expect(result.current.editingProduct).toBeNull();
-        expect(result.current.newDiscount).toEqual(initialNewDiscount);
       });
 
       test('toggleProductAccordion', () => {
@@ -548,11 +545,11 @@ describe('advanced > ', () => {
         expect(result.current.openProductIds).toEqual(new Set(['1']));
       });
 
-      test('handleEditProduct', () => {
+      test('updateEditingProduct', () => {
         const { result } = renderHook(() => useAdmin());
 
         act(() => {
-          result.current.handleEditProduct(mockProducts[0]);
+          result.current.updateEditingProduct(mockProducts[0]);
         });
 
         expect(result.current.editingProduct).toEqual(mockProducts[0]);
@@ -562,7 +559,7 @@ describe('advanced > ', () => {
         const { result } = renderHook(() => useAdmin());
 
         act(() => {
-          result.current.handleEditProduct(mockProducts[0]);
+          result.current.updateEditingProduct(mockProducts[0]);
         });
         act(() => {
           result.current.handleEditingProductUpdate(
@@ -574,12 +571,12 @@ describe('advanced > ', () => {
         expect(result.current.editingProduct).toEqual({ ...mockProducts[0], name: 'newName' });
       });
 
-      describe('handleEditComplete', () => {
+      describe('editComplete', () => {
         test('editingProduct가 null일 때', () => {
           const { result } = renderHook(() => useAdmin());
 
           act(() => {
-            result.current.handleEditComplete();
+            result.current.editComplete();
           });
 
           expect(result.current.editingProduct).toBeNull();
@@ -588,18 +585,27 @@ describe('advanced > ', () => {
           const { result } = renderHook(() => useAdmin());
 
           act(() => {
-            result.current.handleEditProduct(mockProducts[0]);
+            result.current.updateEditingProduct(mockProducts[0]);
           });
           act(() => {
-            result.current.handleEditComplete();
+            result.current.editComplete();
           });
 
           expect(result.current.editingProduct).toBeNull();
         });
       });
+    });
+
+    describe('useNewDiscount', () => {
+      const initialNewDiscount = { quantity: 0, rate: 0 };
+
+      test('newDiscount 초기값', () => {
+        const { result } = renderHook(() => useNewDiscount());
+        expect(result.current.newDiscount).toEqual(initialNewDiscount);
+      });
 
       test('updateDiscount', () => {
-        const { result } = renderHook(() => useAdmin());
+        const { result } = renderHook(() => useNewDiscount());
 
         act(() => {
           result.current.updateDiscount({ quantity: 5, rate: 10 });
@@ -608,42 +614,14 @@ describe('advanced > ', () => {
         expect(result.current.newDiscount).toEqual({ quantity: 5, rate: 10 });
       });
 
-      test('handleAddDiscount', () => {
-        useProductStore.setState({ products: mockProducts });
-        const { result } = renderHook(() => useAdmin());
+      test('addDiscount', () => {
+        const { result } = renderHook(() => useNewDiscount());
 
         act(() => {
-          result.current.handleEditProduct(mockProducts[0]);
-        });
-        act(() => {
-          result.current.handleAddDiscount(mockProducts[0].id);
+          result.current.addDiscount();
         });
 
-        const { products } = useProductStore.getState();
-
-        expect(products[0].discounts).toHaveLength(2);
-        expect(result.current.editingProduct?.discounts).toHaveLength(2);
         expect(result.current.newDiscount).toEqual(initialNewDiscount);
-      });
-
-      test('handleRemoveDiscount', () => {
-        useProductStore.setState({ products: mockProducts });
-        const { result } = renderHook(() => useAdmin());
-
-        act(() => {
-          result.current.handleEditProduct(mockProducts[0]);
-        });
-        act(() => {
-          result.current.handleAddDiscount(mockProducts[0].id);
-        });
-        act(() => {
-          result.current.handleRemoveDiscount(mockProducts[0].id, 0);
-        });
-
-        const { products } = useProductStore.getState();
-
-        expect(products[0].discounts).toHaveLength(1);
-        expect(result.current.editingProduct?.discounts).toHaveLength(1);
       });
     });
   });
