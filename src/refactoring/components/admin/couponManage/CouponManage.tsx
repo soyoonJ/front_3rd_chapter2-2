@@ -2,6 +2,7 @@ import { ChangeEvent } from 'react';
 import { useNewCoupon } from '../../../hooks/admin/useNewCoupon';
 import { useCouponStore } from '../../../stores/useCouponStore';
 import { CouponInfo } from './CouponInfo';
+import { setLocalStorage } from '../../../utils/localStorage';
 
 export const CouponManage = () => {
   const coupons = useCouponStore((state) => state.coupons);
@@ -11,6 +12,7 @@ export const CouponManage = () => {
 
   const handleAddCoupon = () => {
     addCoupon(newCoupon);
+    setLocalStorage('coupons', [...coupons, newCoupon]);
     initializeNewCoupon();
   };
   const handleUpdateNewCoupon = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
