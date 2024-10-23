@@ -10,7 +10,7 @@ export const ProductInfoDetail = ({ product, onEdit }: Props) => {
   return (
     <div>
       {product.discounts.map((discount, index) => (
-        <div className="mb-2">
+        <div className="mb-2" key={index}>
           <DiscountInfo key={index} discount={discount} />
         </div>
       ))}
