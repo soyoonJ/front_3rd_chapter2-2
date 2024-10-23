@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Discount } from '../../../types';
+import { getFormattedValue } from '../../services';
 
 export const useNewDiscount = () => {
   const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });
@@ -10,5 +11,12 @@ export const useNewDiscount = () => {
     setNewDiscount({ quantity: 0, rate: 0 });
   };
 
-  return { newDiscount, updateDiscount, addDiscount };
+  const handleUpdateDiscount = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    const formattedValue = getFormattedValue(name as keyof Discount, value);
+    updateDiscount({ ...newDiscount, [name]: formattedValue });
+  };
+
+  return { newDiscount, updateDiscount, addDiscount, handleUpdateDiscount };
 };

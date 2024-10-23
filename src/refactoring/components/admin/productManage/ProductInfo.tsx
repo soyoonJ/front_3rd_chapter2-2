@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react';
-import { Discount, Product } from '../../../../types';
+import { Product } from '../../../../types';
 import { useAdmin, useNewDiscount } from '../../../hooks';
-import { getFormattedValue } from '../../../services/admin';
 import { ProductInfoSummary, ProductInfoDetail, ProductInfoEdit } from '..';
 import { useProductStore } from '../../../stores';
 import { excludeTargetIndexDiscount, getTargetProduct } from '../../../services';
@@ -15,7 +14,7 @@ export const ProductInfo = ({ product, index }: Props) => {
   const products = useProductStore((state) => state.products);
   const updateProduct = useProductStore((state) => state.updateProduct);
 
-  const { newDiscount, updateDiscount, addDiscount } = useNewDiscount();
+  const { newDiscount, addDiscount, handleUpdateDiscount } = useNewDiscount();
   const {
     openProductIds,
     toggleProductAccordion,
@@ -25,12 +24,6 @@ export const ProductInfo = ({ product, index }: Props) => {
     handleEditingProductUpdate,
   } = useAdmin();
 
-  const handleUpdateDiscount = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    const formattedValue = getFormattedValue(name as keyof Discount, value);
-    updateDiscount({ ...newDiscount, [name]: formattedValue });
-  };
   const handleEditComplete = () => {
     if (!editingProduct) return;
 
