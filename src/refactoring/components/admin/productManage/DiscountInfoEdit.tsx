@@ -1,5 +1,5 @@
 import { Discount } from '../../../../types';
-import { formatRateToPercent } from '../../../services';
+import { DiscountInfo } from './DiscountInfo';
 
 interface Props {
   discount: Discount;
@@ -9,9 +9,7 @@ interface Props {
 export const DiscountInfoEdit = ({ discount, onClick }: Props) => {
   return (
     <div className="flex justify-between items-center mb-2">
-      <span>
-        {discount.quantity}개 이상 구매 시 {formatRateToPercent(discount.rate)}% 할인
-      </span>
+      <DiscountInfo discount={discount} />
       <button onClick={onClick} className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600">
         삭제
       </button>

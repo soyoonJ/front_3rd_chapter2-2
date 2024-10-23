@@ -18,6 +18,7 @@ export const AdminPage = () => {
           ))}
         </div>
       </div>
+
       <CouponManage />
     </Layout>
   );
