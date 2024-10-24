@@ -1,9 +1,5 @@
 import { CartItem, Discount } from '@/types';
 
-export const formatRateToPercent = (discountRate: number) => {
-  return (discountRate * 100).toFixed(0);
-};
-
 export const excludeTargetIndexDiscount = (discounts: Discount[], index: number) => {
   return discounts.filter((_, i) => i !== index);
 };

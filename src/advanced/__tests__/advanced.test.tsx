@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
-import { AdminPage, CartPage } from '../../refactoring/pages';
-import { CartItem, Coupon, Product } from '../../types';
+import { CartItem, Coupon, Product } from '@/types';
+import { AdminPage, CartPage } from '@/refactoring/pages';
 import {
   createProductWithId,
   excludeTargetIndexDiscount,
@@ -10,16 +10,14 @@ import {
   updateOpenProductIds,
   calculateCartTotal,
   calculateItemTotal,
-  formatCurrency,
   getMaxApplicableDiscount,
   getRemainingStock,
   updateCartItemQuantity,
-  formatDiscountValue,
-  formatRateToPercent,
-} from '../../refactoring/helpers';
-import { useCouponStore, useProductStore } from '../../refactoring/stores';
-import { useEditingProduct, useNewCoupon, useNewDiscount, useNewProduct } from '../../refactoring/hooks';
-import { useOpenProductIds } from '../../refactoring/hooks/admin/useOpenProductIds';
+  formatCouponDiscountValue,
+} from '@/refactoring/helpers';
+import { useCouponStore, useProductStore } from '@/refactoring/stores';
+import { useEditingProduct, useNewCoupon, useNewDiscount, useNewProduct, useOpenProductIds } from '@/refactoring/hooks';
+import { formatCurrency, formatRateToPercent } from '@/refactoring/utils';
 
 const mockProducts: Product[] = [
   {
@@ -261,10 +259,6 @@ describe('advanced > ', () => {
     });
 
     describe('services/cart', () => {
-      test('formatCurrency', () => {
-        expect(formatCurrency(10000)).toBe('10,000');
-      });
-
       test('getRemainingStock', () => {
         const product = { id: '1', name: 'product1', price: 10000, stock: 50, discounts: [] };
 
@@ -319,7 +313,7 @@ describe('advanced > ', () => {
     });
 
     describe('services/coupon', () => {
-      describe('formatDiscountValue', () => {
+      describe('formatCouponDiscountValue', () => {
         test('discountType: amount', () => {
           const amountCoupon: Coupon = {
             name: 'coupon1',
@@ -327,7 +321,7 @@ describe('advanced > ', () => {
             discountType: 'amount',
             discountValue: 5000,
           };
-          expect(formatDiscountValue(amountCoupon)).toBe('5000원');
+          expect(formatCouponDiscountValue(amountCoupon)).toBe('5000원');
         });
         test('discountType: percentage', () => {
           const percentageCoupon: Coupon = {
@@ -336,7 +330,7 @@ describe('advanced > ', () => {
             discountType: 'percentage',
             discountValue: 10,
           };
-          expect(formatDiscountValue(percentageCoupon)).toBe('10%');
+          expect(formatCouponDiscountValue(percentageCoupon)).toBe('10%');
         });
       });
     });
@@ -367,10 +361,6 @@ describe('advanced > ', () => {
     });
 
     describe('services/discount', () => {
-      test('formatRateToPercent', () => {
-        expect(formatRateToPercent(0.1)).toBe('10');
-      });
-
       test('excludeTargetIndexDiscount', () => {
         const discounts = [
           { quantity: 10, rate: 0.1 },
@@ -414,6 +404,16 @@ describe('advanced > ', () => {
         const maxApplicableDiscount = getMaxApplicableDiscount(item);
 
         expect(maxApplicableDiscount).toBe(0.2);
+      });
+    });
+
+    describe('utils/format', () => {
+      test('formatCurrency', () => {
+        expect(formatCurrency(10000)).toBe('10,000');
+      });
+
+      test('formatRateToPercent', () => {
+        expect(formatRateToPercent(0.1)).toBe('10');
       });
     });
   });

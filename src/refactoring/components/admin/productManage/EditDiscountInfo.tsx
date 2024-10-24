@@ -1,4 +1,4 @@
-import { formatRateToPercent } from '@/refactoring/helpers';
+import { formatRateToPercent } from '@/refactoring/utils';
 import { Discount } from '@/types';
 
 interface Props {

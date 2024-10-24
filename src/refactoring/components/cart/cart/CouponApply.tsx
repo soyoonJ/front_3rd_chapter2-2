@@ -1,4 +1,4 @@
-import { formatDiscountValue } from '@/refactoring/helpers/coupon';
+import { formatCouponDiscountValue } from '@/refactoring/helpers/coupon';
 import { useCouponStore } from '@/refactoring/stores/useCouponStore';
 import { Coupon } from '@/types';
 
@@ -20,14 +20,14 @@ export const CouponApply = ({ applyCoupon, selectedCoupon }: Props) => {
         <option value="">쿠폰 선택</option>
         {coupons.map((coupon, index) => (
           <option key={coupon.code} value={index}>
-            {coupon.name} - {formatDiscountValue(coupon)}
+            {coupon.name} - {formatCouponDiscountValue(coupon)}
           </option>
         ))}
       </select>
 
       {selectedCoupon && (
         <p className="text-green-600">
-          적용된 쿠폰: {selectedCoupon.name}({formatDiscountValue(selectedCoupon)} 할인)
+          적용된 쿠폰: {selectedCoupon.name}({formatCouponDiscountValue(selectedCoupon)} 할인)
         </p>
       )}
     </div>

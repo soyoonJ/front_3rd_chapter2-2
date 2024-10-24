@@ -1,4 +1,4 @@
-import { formatCurrency } from '@/refactoring/helpers';
+import { formatCurrency } from '@/refactoring/utils';
 
 interface Props {
   cartTotal: {

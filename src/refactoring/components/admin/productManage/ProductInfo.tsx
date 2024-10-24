@@ -1,8 +1,7 @@
 import { ChangeEvent } from 'react';
 
 import { excludeTargetIndexDiscount, getTargetProduct } from '@/refactoring/helpers';
-import { useEditingProduct, useNewDiscount } from '@/refactoring/hooks';
-import { useOpenProductIds } from '@/refactoring/hooks/admin/useOpenProductIds';
+import { useEditingProduct, useNewDiscount, useOpenProductIds } from '@/refactoring/hooks';
 import { useProductStore } from '@/refactoring/stores';
 import { Product } from '@/types';
 

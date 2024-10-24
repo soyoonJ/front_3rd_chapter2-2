@@ -1,4 +1,4 @@
-import { formatDiscountValue } from '@/refactoring/helpers';
+import { formatCouponDiscountValue } from '@/refactoring/helpers';
 import { Coupon } from '@/types';
 
 interface Props {
@@ -10,7 +10,7 @@ export const CouponInfo = ({ coupon, index }: Props) => {
   return (
     <div data-testid={`coupon-${index + 1}`} className="bg-gray-100 p-2 rounded">
       {coupon.name} ({coupon.code}):
-      {formatDiscountValue(coupon)} 할인
+      {formatCouponDiscountValue(coupon)} 할인
     </div>
   );
 };

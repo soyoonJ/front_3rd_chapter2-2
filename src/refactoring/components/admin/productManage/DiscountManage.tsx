@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import { formatRateToPercent } from '@/refactoring/helpers';
+import { formatRateToPercent } from '@/refactoring/utils';
 import { Discount, Product } from '@/types';
 
 import { DiscountInfoEdit } from './DiscountInfoEdit';
