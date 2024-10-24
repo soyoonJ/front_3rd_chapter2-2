@@ -1,4 +1,5 @@
 import { CartItem, Coupon, Product } from '@/types';
+
 import { getMaxApplicableDiscount } from './discount';
 
 export const formatCurrency = (price: number) => {
@@ -57,7 +58,7 @@ const calculateCouponDiscount = (
     updatedTotalAfterDiscount = getDiscountedPrice(updatedTotalAfterDiscount, selectedCoupon.discountValue / 100);
   }
 
-  let updatedTotalDiscount = totalBeforeDiscount - updatedTotalAfterDiscount;
+  const updatedTotalDiscount = totalBeforeDiscount - updatedTotalAfterDiscount;
 
   return { updatedTotalAfterDiscount, updatedTotalDiscount };
 };

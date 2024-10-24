@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react';
-import { useNewProduct } from '@/refactoring/hooks/admin/useNewProduct';
+
 import { createProductWithId } from '@/refactoring/helpers';
+import { useNewProduct } from '@/refactoring/hooks/admin/useNewProduct';
 import { useProductStore } from '@/refactoring/stores/useProductStore';
 
 export const NewProduct = () => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Discount, Product } from '@/types';
+
 import { getFormattedValue } from '@/refactoring/helpers';
+import { Discount, Product } from '@/types';
 
 export const useEditingProduct = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);

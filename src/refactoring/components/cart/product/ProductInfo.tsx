@@ -1,5 +1,6 @@
-import { Product } from '@/types';
 import { formatRateToPercent, getMaxDiscount } from '@/refactoring/helpers';
+import { Product } from '@/types';
+
 import { AddToCartButton } from './AddToCartButton';
 import DiscountInfo from './DiscountInfo';
 

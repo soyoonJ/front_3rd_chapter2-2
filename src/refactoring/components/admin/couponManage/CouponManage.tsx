@@ -1,7 +1,9 @@
 import { ChangeEvent } from 'react';
+
 import { useNewCoupon } from '@/refactoring/hooks/admin/useNewCoupon';
 import { useCouponStore } from '@/refactoring/stores/useCouponStore';
 import { setLocalStorage } from '@/refactoring/utils/localStorage';
+
 import { CouponInfo } from './CouponInfo';
 
 export const CouponManage = () => {

@@ -1,5 +1,7 @@
 import { create } from 'zustand';
+
 import { Product } from '@/types';
+
 import initialProducts from '../data/products.json';
 
 interface ProductState {

@@ -1,4 +1,5 @@
 import { Product } from '@/types';
+
 import { DiscountInfo } from '..';
 
 interface Props {

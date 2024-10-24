@@ -1,5 +1,7 @@
 import { create } from 'zustand';
+
 import { Coupon } from '@/types';
+
 import initialCoupons from '../data/coupons.json';
 import { getLocalStorage } from '../utils/localStorage';
 

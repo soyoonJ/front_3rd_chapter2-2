@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { updateOpenProductIds } from '@/refactoring/helpers';
 
 export const useOpenProductIds = () => {

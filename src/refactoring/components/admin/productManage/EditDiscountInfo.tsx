@@ -1,5 +1,5 @@
-import { Discount } from '@/types';
 import { formatRateToPercent } from '@/refactoring/helpers';
+import { Discount } from '@/types';
 
 interface Props {
   discount: Discount;

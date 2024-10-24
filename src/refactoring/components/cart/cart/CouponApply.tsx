@@ -1,6 +1,6 @@
-import { Coupon } from '@/types';
 import { formatDiscountValue } from '@/refactoring/helpers/coupon';
 import { useCouponStore } from '@/refactoring/stores/useCouponStore';
+import { Coupon } from '@/types';
 
 interface Props {
   applyCoupon: (coupon: Coupon) => void;
