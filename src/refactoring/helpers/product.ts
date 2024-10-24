@@ -1,4 +1,4 @@
-import { Product } from '../../types';
+import { Product } from '@/types';
 
 export const createProductWithId = (product: Omit<Product, 'id'>, id = Date.now().toString()) => {
   return { ...product, id };

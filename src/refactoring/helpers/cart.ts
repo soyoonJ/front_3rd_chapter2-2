@@ -1,4 +1,4 @@
-import { CartItem, Coupon, Product } from '../../types';
+import { CartItem, Coupon, Product } from '@/types';
 import { getMaxApplicableDiscount } from './discount';
 
 export const formatCurrency = (price: number) => {

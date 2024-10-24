@@ -1,4 +1,4 @@
-import { Discount } from '../../../../types';
+import { Discount } from '@/types';
 import { DiscountInfo } from './DiscountInfo';
 
 interface Props {

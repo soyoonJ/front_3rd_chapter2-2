@@ -1,8 +1,8 @@
 import { ChangeEvent } from 'react';
-import { useNewCoupon } from '../../../hooks/admin/useNewCoupon';
-import { useCouponStore } from '../../../stores/useCouponStore';
+import { useNewCoupon } from '@/refactoring/hooks/admin/useNewCoupon';
+import { useCouponStore } from '@/refactoring/stores/useCouponStore';
+import { setLocalStorage } from '@/refactoring/utils/localStorage';
 import { CouponInfo } from './CouponInfo';
-import { setLocalStorage } from '../../../utils/localStorage';
 
 export const CouponManage = () => {
   const coupons = useCouponStore((state) => state.coupons);

@@ -1,4 +1,4 @@
-import { CartItem, Discount } from '../../types';
+import { CartItem, Discount } from '@/types';
 
 export const formatRateToPercent = (discountRate: number) => {
   return (discountRate * 100).toFixed(0);

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Coupon } from '../../../types';
+import { Coupon } from '@/types';
 
 export const useNewCoupon = () => {
   const couponInitialState: Coupon = {

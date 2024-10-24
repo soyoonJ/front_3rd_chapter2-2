@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Product } from '../../../types';
+import { Product } from '@/types';
 
 export const useNewProduct = () => {
   const [showNewProductForm, setShowNewProductForm] = useState(false);

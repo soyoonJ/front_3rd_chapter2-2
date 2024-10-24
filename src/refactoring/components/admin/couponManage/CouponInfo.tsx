@@ -1,5 +1,5 @@
-import { Coupon } from '../../../../types';
-import { formatDiscountValue } from '../../../helpers';
+import { Coupon } from '@/types';
+import { formatDiscountValue } from '@/refactoring/helpers';
 
 interface Props {
   coupon: Coupon;

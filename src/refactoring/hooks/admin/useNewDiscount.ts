@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react';
-import { Discount } from '../../../types';
-import { getFormattedValue } from '../../helpers';
+import { Discount } from '@/types';
+import { getFormattedValue } from '@/refactoring/helpers';
 
 export const useNewDiscount = () => {
   const [newDiscount, setNewDiscount] = useState<Discount>({ quantity: 0, rate: 0 });

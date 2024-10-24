@@ -1,10 +1,10 @@
 import { ChangeEvent } from 'react';
-import { Product } from '../../../../types';
-import { useEditingProduct, useNewDiscount } from '../../../hooks';
+import { Product } from '@/types';
+import { useEditingProduct, useNewDiscount } from '@/refactoring/hooks';
+import { useProductStore } from '@/refactoring/stores';
+import { excludeTargetIndexDiscount, getTargetProduct } from '@/refactoring/helpers';
+import { useOpenProductIds } from '@/refactoring/hooks/admin/useOpenProductIds';
 import { ProductInfoSummary, ProductInfoDetail, ProductInfoEdit } from '..';
-import { useProductStore } from '../../../stores';
-import { excludeTargetIndexDiscount, getTargetProduct } from '../../../helpers';
-import { useOpenProductIds } from '../../../hooks/admin/useOpenProductIds';
 
 interface Props {
   product: Product;

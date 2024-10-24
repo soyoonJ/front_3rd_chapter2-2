@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { updateOpenProductIds } from '../../helpers';
+import { updateOpenProductIds } from '@/refactoring/helpers';
 
 export const useOpenProductIds = () => {
   const [openProductIds, setOpenProductIds] = useState<Set<string>>(new Set());

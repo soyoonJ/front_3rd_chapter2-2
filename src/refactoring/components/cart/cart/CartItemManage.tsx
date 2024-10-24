@@ -1,5 +1,5 @@
-import { CartItem } from '../../../../types';
-import { formatRateToPercent, getMaxApplicableDiscount } from '../../../helpers';
+import { CartItem } from '@/types';
+import { formatRateToPercent, getMaxApplicableDiscount } from '@/refactoring/helpers';
 
 interface Props {
   item: CartItem;
