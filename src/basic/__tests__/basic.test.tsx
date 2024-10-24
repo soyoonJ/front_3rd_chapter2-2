@@ -4,10 +4,10 @@ import { CartPage } from '../../refactoring/pages/CartPage';
 import { AdminPage } from '../../refactoring/pages/AdminPage';
 import { CartItem, Coupon, Product } from '../../types';
 import { useCart } from '../../refactoring/hooks';
-import * as cartUtils from '../../refactoring/services/cart';
+import * as cartUtils from '../../refactoring/helpers/cart';
 import { useCouponStore } from '../../refactoring/stores/useCouponStore';
 import { useProductStore } from '../../refactoring/stores/useProductStore';
-import { getMaxApplicableDiscount } from '../../refactoring/services';
+import { getMaxApplicableDiscount } from '../../refactoring/helpers';
 
 const mockProducts: Product[] = [
   {

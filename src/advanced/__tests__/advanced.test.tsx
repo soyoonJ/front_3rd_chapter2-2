@@ -16,7 +16,7 @@ import {
   updateCartItemQuantity,
   formatDiscountValue,
   formatRateToPercent,
-} from '../../refactoring/services';
+} from '../../refactoring/helpers';
 import { useCouponStore, useProductStore } from '../../refactoring/stores';
 import { useAdmin, useNewCoupon, useNewDiscount, useNewProduct } from '../../refactoring/hooks';
 

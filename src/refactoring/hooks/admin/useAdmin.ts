@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Discount, Product } from '../../../types';
-import { getFormattedValue, updateOpenProductIds } from '../../services';
+import { getFormattedValue, updateOpenProductIds } from '../../helpers';
 
 export const useAdmin = () => {
   // 상품 상세 토글

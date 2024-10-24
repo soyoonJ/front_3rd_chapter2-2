@@ -1,7 +1,7 @@
 // useCart.ts
 import { useState } from 'react';
 import { CartItem, Coupon, Product } from '../../../types';
-import { calculateCartTotal, getRemainingStock, updateCartItemQuantity } from '../../services/cart';
+import { calculateCartTotal, getRemainingStock, updateCartItemQuantity } from '../../helpers/cart';
 
 export const useCart = () => {
   const [cart, setCart] = useState<CartItem[]>([]);

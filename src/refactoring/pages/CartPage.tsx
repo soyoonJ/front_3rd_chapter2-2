@@ -1,7 +1,7 @@
 import { CartItemManage, CartSummary, CouponApply, ProductInfo } from '../components/cart';
 import { Layout } from '../components/layout';
 import { useCart } from '../hooks/index.ts';
-import { getRemainingStock } from '../services/cart.ts';
+import { getRemainingStock } from '../helpers/cart.ts';
 import { useProductStore } from '../stores/useProductStore.ts';
 
 export const CartPage = () => {

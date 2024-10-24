@@ -1,5 +1,5 @@
 import { Discount } from '../../../../types';
-import { formatRateToPercent } from '../../../services';
+import { formatRateToPercent } from '../../../helpers';
 
 interface Props {
   discount: Discount;

@@ -3,7 +3,7 @@ import { Product } from '../../../../types';
 import { useAdmin, useNewDiscount } from '../../../hooks';
 import { ProductInfoSummary, ProductInfoDetail, ProductInfoEdit } from '..';
 import { useProductStore } from '../../../stores';
-import { excludeTargetIndexDiscount, getTargetProduct } from '../../../services';
+import { excludeTargetIndexDiscount, getTargetProduct } from '../../../helpers';
 
 interface Props {
   product: Product;

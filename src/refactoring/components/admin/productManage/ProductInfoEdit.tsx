@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react';
 import { Discount, Product } from '../../../../types';
-import { formatRateToPercent } from '../../../services';
+import { formatRateToPercent } from '../../../helpers';
 import { DiscountInfoEdit } from './DiscountInfoEdit';
 
 interface Props {
