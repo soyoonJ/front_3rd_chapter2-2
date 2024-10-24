@@ -1,9 +1,10 @@
 import { ChangeEvent } from 'react';
 import { Product } from '../../../../types';
-import { useAdmin, useNewDiscount } from '../../../hooks';
+import { useEditingProduct, useNewDiscount } from '../../../hooks';
 import { ProductInfoSummary, ProductInfoDetail, ProductInfoEdit } from '..';
 import { useProductStore } from '../../../stores';
 import { excludeTargetIndexDiscount, getTargetProduct } from '../../../helpers';
+import { useOpenProductIds } from '../../../hooks/admin/useOpenProductIds';
 
 interface Props {
   product: Product;
@@ -14,15 +15,9 @@ export const ProductInfo = ({ product, index }: Props) => {
   const products = useProductStore((state) => state.products);
   const updateProduct = useProductStore((state) => state.updateProduct);
 
+  const { openProductIds, toggleProductAccordion } = useOpenProductIds();
+  const { editingProduct, updateEditingProduct, handleEditingProductUpdate } = useEditingProduct();
   const { newDiscount, addDiscount, handleUpdateDiscount } = useNewDiscount();
-  const {
-    openProductIds,
-    toggleProductAccordion,
-
-    editingProduct,
-    updateEditingProduct,
-    handleEditingProductUpdate,
-  } = useAdmin();
 
   const handleEditComplete = () => {
     if (!editingProduct) return;

@@ -18,7 +18,8 @@ import {
   formatRateToPercent,
 } from '../../refactoring/helpers';
 import { useCouponStore, useProductStore } from '../../refactoring/stores';
-import { useAdmin, useNewCoupon, useNewDiscount, useNewProduct } from '../../refactoring/hooks';
+import { useEditingProduct, useNewCoupon, useNewDiscount, useNewProduct } from '../../refactoring/hooks';
+import { useOpenProductIds } from '../../refactoring/hooks/admin/useOpenProductIds';
 
 const mockProducts: Product[] = [
   {
@@ -527,16 +528,15 @@ describe('advanced > ', () => {
       });
     });
 
-    describe('useAdmin', () => {
-      test('useAdmin state 초기값', () => {
-        const { result } = renderHook(() => useAdmin());
+    describe('useOpenProductIds', () => {
+      test('useOpenProductIds state 초기값', () => {
+        const { result } = renderHook(() => useOpenProductIds());
 
         expect(result.current.openProductIds).toBeInstanceOf(Set);
-        expect(result.current.editingProduct).toBeNull();
       });
 
       test('toggleProductAccordion', () => {
-        const { result } = renderHook(() => useAdmin());
+        const { result } = renderHook(() => useOpenProductIds());
 
         act(() => {
           result.current.toggleProductAccordion('1');
@@ -544,9 +544,17 @@ describe('advanced > ', () => {
 
         expect(result.current.openProductIds).toEqual(new Set(['1']));
       });
+    });
+
+    describe('useEditingProduct', () => {
+      test('useEditingProduct state 초기값', () => {
+        const { result } = renderHook(() => useEditingProduct());
+
+        expect(result.current.editingProduct).toBeNull();
+      });
 
       test('updateEditingProduct', () => {
-        const { result } = renderHook(() => useAdmin());
+        const { result } = renderHook(() => useEditingProduct());
 
         act(() => {
           result.current.updateEditingProduct(mockProducts[0]);
@@ -556,7 +564,7 @@ describe('advanced > ', () => {
       });
 
       test('handleEditingProductUpdate', () => {
-        const { result } = renderHook(() => useAdmin());
+        const { result } = renderHook(() => useEditingProduct());
 
         act(() => {
           result.current.updateEditingProduct(mockProducts[0]);
